@@ -47,6 +47,10 @@ if [ -z "$PROD_URL" ];then
     exit 1
 fi
 
+# Set deployment variables
+TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+SERVER_HOST="localhost"  # Since deployment appears to be local
+
 # Update production environment file
 print_status "Updating production environment configuration..."
 cat > src/environments/environment.prod.ts << EOF
