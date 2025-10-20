@@ -12,3 +12,6 @@ export * from './room-status.enum';
 export * from './online-player.interface';
 export * from './room.interface';
 export * from './websocket-events.interface';
+
+// Translation models
+export * from './translation.model';
