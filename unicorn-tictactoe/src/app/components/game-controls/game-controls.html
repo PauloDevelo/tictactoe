@@ -13,8 +13,8 @@
     class="reset-button"
     (click)="onResetClick()"
     [class.game-over]="isGameOver"
-    [attr.aria-label]="isGameOver ? 'Start a new game' : 'Reset current game'"
+    [attr.aria-label]="isGameOver ? translationService.translate('game.controls.aria.newGame') : translationService.translate('game.controls.aria.resetGame')"
   >
-    {{ isGameOver ? '🎮 New Game' : '🔄 Reset Game' }}
+    {{ isGameOver ? '🎮 ' + translationService.translate('game.controls.buttons.newGame') : '🔄 ' + translationService.translate('game.controls.buttons.resetGame') }}
   </button>
 </div>

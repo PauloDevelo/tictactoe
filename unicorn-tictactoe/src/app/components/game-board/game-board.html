@@ -1,7 +1,7 @@
 <div 
   class="game-board" 
   role="grid" 
-  aria-label="Tic-tac-toe game board"
+  [attr.aria-label]="translationService.translate('game.board.aria.gameBoard')"
 >
   <app-game-cell
     *ngFor="let cell of cells; let i = index"

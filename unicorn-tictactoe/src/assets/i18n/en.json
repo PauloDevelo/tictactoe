@@ -136,5 +136,63 @@
       "copied": "Copied!",
       "confirmDelete": "Are you sure you want to delete room \"{roomName}\"?"
     }
+  },
+  "game": {
+    "controls": {
+      "buttons": {
+        "newGame": "New Game",
+        "resetGame": "Reset Game"
+      },
+      "status": {
+        "local": {
+          "unicornTurn": "Unicorn's Turn",
+          "catTurn": "Cat's Turn",
+          "unicornWins": "Unicorn Wins!",
+          "catWins": "Cat Wins!",
+          "draw": "It's a Draw!"
+        },
+        "online": {
+          "yourTurn": "Your Turn",
+          "opponentTurn": "Opponent's Turn",
+          "youWin": "You Win!",
+          "youLose": "You Lose",
+          "draw": "It's a Draw!"
+        }
+      },
+      "aria": {
+        "newGame": "Start a new game",
+        "resetGame": "Reset current game"
+      }
+    },
+    "score": {
+      "labels": {
+        "unicorn": "Unicorn",
+        "cat": "Cat",
+        "score": "Score",
+        "yourTurn": "Your Turn",
+        "vs": "VS"
+      },
+      "aria": {
+        "scoreBoard": "Game scores",
+        "unicornPlayer": "Unicorn player, score: {{score}}{{turn}}",
+        "catPlayer": "Cat player, score: {{score}}{{turn}}",
+        "currentTurn": ", current turn"
+      }
+    },
+    "board": {
+      "aria": {
+        "gameBoard": "Tic-tac-toe game board"
+      }
+    },
+    "cell": {
+      "aria": {
+        "cellPosition": "Cell {{position}}",
+        "occupiedByUnicorn": "occupied by Unicorn",
+        "occupiedByCat": "occupied by Cat",
+        "empty": "empty",
+        "gameOver": "game over",
+        "clickToPlace": "click to place {{player}}"
+      }
+    }
   }
 }

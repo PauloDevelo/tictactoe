@@ -1,16 +1,43 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GameCell } from './game-cell';
+import { TranslationService } from '../../services/translation.service';
 import { Player } from '../../models/player.model';
 
 describe('GameCell', () => {
   let component: GameCell;
   let fixture: ComponentFixture<GameCell>;
+  let translationService: jasmine.SpyObj<TranslationService>;
 
   beforeEach(async () => {
+    const translationServiceSpy = jasmine.createSpyObj('TranslationService', ['translate']);
+    translationServiceSpy.translate.and.callFake((key: string, params?: any) => {
+      const translations: { [key: string]: string } = {
+        'game.cell.aria.occupiedByUnicorn': 'occupied by Unicorn',
+        'game.cell.aria.occupiedByCat': 'occupied by Cat',
+        'game.cell.aria.empty': 'empty',
+        'game.cell.aria.gameOver': 'game over',
+        'game.score.labels.unicorn': 'Unicorn',
+        'game.score.labels.cat': 'Cat'
+      };
+      
+      if (key === 'game.cell.aria.cellPosition') {
+        return `Cell ${params?.position}`;
+      }
+      if (key === 'game.cell.aria.clickToPlace') {
+        return `click to place ${params?.player}`;
+      }
+      
+      return translations[key] || key;
+    });
+
     await TestBed.configureTestingModule({
-      imports: [GameCell]
+      imports: [GameCell],
+      providers: [
+        { provide: TranslationService, useValue: translationServiceSpy }
+      ]
     }).compileComponents();
 
+    translationService = TestBed.inject(TranslationService) as jasmine.SpyObj<TranslationService>;
     fixture = TestBed.createComponent(GameCell);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -1,14 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GameControls } from './game-controls';
 import { GameService } from '../../services/game.service';
+import { OnlineGameService } from '../../services/online-game.service';
+import { TranslationService } from '../../services/translation.service';
 import { Player } from '../../models/player.model';
 import { GameStatus } from '../../models/game-status.enum';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 
 describe('GameControls', () => {
   let component: GameControls;
   let fixture: ComponentFixture<GameControls>;
   let gameService: jasmine.SpyObj<GameService>;
+  let onlineGameService: jasmine.SpyObj<OnlineGameService>;
+  let translationService: jasmine.SpyObj<TranslationService>;
   let gameStateSubject: BehaviorSubject<any>;
 
   beforeEach(async () => {
@@ -26,14 +30,38 @@ describe('GameControls', () => {
       gameState$: gameStateSubject.asObservable()
     });
 
+    const onlineGameServiceSpy = jasmine.createSpyObj('OnlineGameService', ['resetGame', 'getOnlineGameInfo', 'getGameState']);
+    onlineGameServiceSpy.getOnlineGameInfo.and.returnValue(of(null));
+    onlineGameServiceSpy.getGameState.and.returnValue(of(null));
+
+    const translationServiceSpy = jasmine.createSpyObj('TranslationService', ['translate']);
+    translationServiceSpy.translate.and.callFake((key: string) => {
+      const translations: { [key: string]: string } = {
+        'game.controls.status.local.unicornTurn': "Unicorn's Turn",
+        'game.controls.status.local.catTurn': "Cat's Turn",
+        'game.controls.status.local.unicornWins': "Unicorn Wins!",
+        'game.controls.status.local.catWins': "Cat Wins!",
+        'game.controls.status.local.draw': "It's a Draw!",
+        'game.controls.buttons.newGame': "New Game",
+        'game.controls.buttons.resetGame': "Reset Game",
+        'game.controls.aria.newGame': "Start a new game",
+        'game.controls.aria.resetGame': "Reset current game"
+      };
+      return translations[key] || key;
+    });
+
     await TestBed.configureTestingModule({
       imports: [GameControls],
       providers: [
-        { provide: GameService, useValue: gameServiceSpy }
+        { provide: GameService, useValue: gameServiceSpy },
+        { provide: OnlineGameService, useValue: onlineGameServiceSpy },
+        { provide: TranslationService, useValue: translationServiceSpy }
       ]
     }).compileComponents();
 
     gameService = TestBed.inject(GameService) as jasmine.SpyObj<GameService>;
+    onlineGameService = TestBed.inject(OnlineGameService) as jasmine.SpyObj<OnlineGameService>;
+    translationService = TestBed.inject(TranslationService) as jasmine.SpyObj<TranslationService>;
     fixture = TestBed.createComponent(GameControls);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -1,35 +1,35 @@
-<div class="score-board" *ngIf="!isOnlineMode" role="region" aria-label="Game scores">
+<div class="score-board" *ngIf="!isOnlineMode" role="region" [attr.aria-label]="translationService.translate('game.score.aria.scoreBoard')">
   <div 
     class="player-score unicorn" 
     [class.active]="isUnicornTurn"
     role="group"
-    [attr.aria-label]="'Unicorn player, score: ' + unicornScore + (isUnicornTurn ? ', current turn' : '')"
+    [attr.aria-label]="translationService.translate('game.score.aria.unicornPlayer', { score: unicornScore, turn: isUnicornTurn ? translationService.translate('game.score.aria.currentTurn') : '' })"
   >
     <div class="player-icon" aria-hidden="true">🦄</div>
     <div class="player-info">
-      <div class="player-name">Unicorn</div>
-      <div class="score" aria-label="Score">{{ unicornScore }}</div>
+      <div class="player-name">{{ translationService.translate('game.score.labels.unicorn') }}</div>
+      <div class="score" [attr.aria-label]="translationService.translate('game.score.labels.score')">{{ unicornScore }}</div>
     </div>
     <div class="turn-indicator" *ngIf="isUnicornTurn" aria-live="polite">
-      <span class="pulse" aria-hidden="true">●</span> Your Turn
+      <span class="pulse" aria-hidden="true">●</span> {{ translationService.translate('game.score.labels.yourTurn') }}
     </div>
   </div>
 
-  <div class="vs-divider" aria-hidden="true">VS</div>
+  <div class="vs-divider" aria-hidden="true">{{ translationService.translate('game.score.labels.vs') }}</div>
 
   <div 
     class="player-score cat" 
     [class.active]="isCatTurn"
     role="group"
-    [attr.aria-label]="'Cat player, score: ' + catScore + (isCatTurn ? ', current turn' : '')"
+    [attr.aria-label]="translationService.translate('game.score.aria.catPlayer', { score: catScore, turn: isCatTurn ? translationService.translate('game.score.aria.currentTurn') : '' })"
   >
     <div class="player-icon" aria-hidden="true">🐱</div>
     <div class="player-info">
-      <div class="player-name">Cat</div>
-      <div class="score" aria-label="Score">{{ catScore }}</div>
+      <div class="player-name">{{ translationService.translate('game.score.labels.cat') }}</div>
+      <div class="score" [attr.aria-label]="translationService.translate('game.score.labels.score')">{{ catScore }}</div>
     </div>
     <div class="turn-indicator" *ngIf="isCatTurn" aria-live="polite">
-      <span class="pulse" aria-hidden="true">●</span> Your Turn
+      <span class="pulse" aria-hidden="true">●</span> {{ translationService.translate('game.score.labels.yourTurn') }}
     </div>
   </div>
 </div>

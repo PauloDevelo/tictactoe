@@ -136,5 +136,63 @@
       "copied": "Copié !",
       "confirmDelete": "Êtes-vous sûr de vouloir supprimer la salle \"{roomName}\" ?"
     }
+  },
+  "game": {
+    "controls": {
+      "buttons": {
+        "newGame": "Nouvelle partie",
+        "resetGame": "Réinitialiser"
+      },
+      "status": {
+        "local": {
+          "unicornTurn": "Tour de la Licorne",
+          "catTurn": "Tour du Chat",
+          "unicornWins": "La Licorne gagne !",
+          "catWins": "Le Chat gagne !",
+          "draw": "Match nul !"
+        },
+        "online": {
+          "yourTurn": "Votre tour",
+          "opponentTurn": "Tour de l'adversaire",
+          "youWin": "Vous avez gagné !",
+          "youLose": "Vous avez perdu",
+          "draw": "Match nul !"
+        }
+      },
+      "aria": {
+        "newGame": "Commencer une nouvelle partie",
+        "resetGame": "Réinitialiser la partie en cours"
+      }
+    },
+    "score": {
+      "labels": {
+        "unicorn": "Licorne",
+        "cat": "Chat",
+        "score": "Score",
+        "yourTurn": "Votre tour",
+        "vs": "VS"
+      },
+      "aria": {
+        "scoreBoard": "Scores du jeu",
+        "unicornPlayer": "Joueur Licorne, score : {{score}}{{turn}}",
+        "catPlayer": "Joueur Chat, score : {{score}}{{turn}}",
+        "currentTurn": ", tour actuel"
+      }
+    },
+    "board": {
+      "aria": {
+        "gameBoard": "Plateau de jeu Tic-tac-toe"
+      }
+    },
+    "cell": {
+      "aria": {
+        "cellPosition": "Case {{position}}",
+        "occupiedByUnicorn": "occupée par la Licorne",
+        "occupiedByCat": "occupée par le Chat",
+        "empty": "vide",
+        "gameOver": "partie terminée",
+        "clickToPlace": "cliquez pour placer {{player}}"
+      }
+    }
   }
 }

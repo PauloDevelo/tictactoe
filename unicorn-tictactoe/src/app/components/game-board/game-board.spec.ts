@@ -1,14 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GameBoard } from './game-board';
 import { GameService } from '../../services/game.service';
+import { OnlineGameService } from '../../services/online-game.service';
+import { TranslationService } from '../../services/translation.service';
 import { Player } from '../../models/player.model';
 import { GameStatus } from '../../models/game-status.enum';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 
 describe('GameBoard', () => {
   let component: GameBoard;
   let fixture: ComponentFixture<GameBoard>;
   let gameService: jasmine.SpyObj<GameService>;
+  let onlineGameService: jasmine.SpyObj<OnlineGameService>;
+  let translationService: jasmine.SpyObj<TranslationService>;
   let gameStateSubject: BehaviorSubject<any>;
 
   beforeEach(async () => {
@@ -26,14 +30,30 @@ describe('GameBoard', () => {
       gameState$: gameStateSubject.asObservable()
     });
 
+    const onlineGameServiceSpy = jasmine.createSpyObj('OnlineGameService', ['makeMove', 'getOnlineGameInfo', 'getGameState']);
+    onlineGameServiceSpy.getOnlineGameInfo.and.returnValue(of(null));
+    onlineGameServiceSpy.getGameState.and.returnValue(of(null));
+
+    const translationServiceSpy = jasmine.createSpyObj('TranslationService', ['translate']);
+    translationServiceSpy.translate.and.callFake((key: string) => {
+      const translations: { [key: string]: string } = {
+        'game.board.aria.gameBoard': 'Tic-tac-toe game board'
+      };
+      return translations[key] || key;
+    });
+
     await TestBed.configureTestingModule({
       imports: [GameBoard],
       providers: [
-        { provide: GameService, useValue: gameServiceSpy }
+        { provide: GameService, useValue: gameServiceSpy },
+        { provide: OnlineGameService, useValue: onlineGameServiceSpy },
+        { provide: TranslationService, useValue: translationServiceSpy }
       ]
     }).compileComponents();
 
     gameService = TestBed.inject(GameService) as jasmine.SpyObj<GameService>;
+    onlineGameService = TestBed.inject(OnlineGameService) as jasmine.SpyObj<OnlineGameService>;
+    translationService = TestBed.inject(TranslationService) as jasmine.SpyObj<TranslationService>;
     fixture = TestBed.createComponent(GameBoard);
     component = fixture.componentInstance;
     fixture.detectChanges();

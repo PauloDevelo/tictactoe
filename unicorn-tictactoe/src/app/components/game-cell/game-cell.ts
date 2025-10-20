@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Player } from '../../models/player.model';
+import { TranslationService } from '../../services/translation.service';
 
 @Component({
   selector: 'app-game-cell',
@@ -16,6 +17,8 @@ export class GameCell {
   @Input() cellIndex: number = 0;
 
   @Output() cellClicked = new EventEmitter<void>();
+
+  constructor(private translationService: TranslationService) {}
 
   get isDisabled(): boolean {
     return this.player !== null || this.isGameOver;
@@ -33,18 +36,21 @@ export class GameCell {
   }
 
   get ariaLabel(): string {
-    const position = `Cell ${this.cellIndex + 1}`;
+    const position = this.translationService.translate('game.cell.aria.cellPosition', { position: this.cellIndex + 1 });
     
     if (this.player === Player.UNICORN) {
-      return `${position}, occupied by Unicorn`;
+      return `${position}, ${this.translationService.translate('game.cell.aria.occupiedByUnicorn')}`;
     }
     if (this.player === Player.CAT) {
-      return `${position}, occupied by Cat`;
+      return `${position}, ${this.translationService.translate('game.cell.aria.occupiedByCat')}`;
     }
     if (this.isGameOver) {
-      return `${position}, empty, game over`;
+      return `${position}, ${this.translationService.translate('game.cell.aria.empty')}, ${this.translationService.translate('game.cell.aria.gameOver')}`;
     }
-    return `${position}, empty, click to place ${this.currentPlayer === Player.UNICORN ? 'Unicorn' : 'Cat'}`;
+    const playerName = this.currentPlayer === Player.UNICORN 
+      ? this.translationService.translate('game.score.labels.unicorn')
+      : this.translationService.translate('game.score.labels.cat');
+    return `${position}, ${this.translationService.translate('game.cell.aria.empty')}, ${this.translationService.translate('game.cell.aria.clickToPlace', { player: playerName })}`;
   }
 
   onClick(): void {

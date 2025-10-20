@@ -6,6 +6,7 @@ import { GameStatus } from '../../models/game-status.enum';
 import { Player } from '../../models/player.model';
 import { GameService } from '../../services/game.service';
 import { OnlineGameService } from '../../services/online-game.service';
+import { TranslationService } from '../../services/translation.service';
 
 @Component({
   selector: 'app-game-controls',
@@ -29,7 +30,8 @@ export class GameControls implements OnInit, OnDestroy {
 
   constructor(
     private gameService: GameService,
-    private onlineGameService: OnlineGameService
+    private onlineGameService: OnlineGameService,
+    public translationService: TranslationService
   ) {}
 
   ngOnInit(): void {
@@ -77,15 +79,15 @@ export class GameControls implements OnInit, OnDestroy {
   private getLocalStatusMessage(): string {
     switch (this.gameStatus) {
       case GameStatus.UNICORN_WINS:
-        return '🦄 Unicorn Wins! 🎉';
+        return '🦄 ' + this.translationService.translate('game.controls.status.local.unicornWins') + ' 🎉';
       case GameStatus.CAT_WINS:
-        return '🐱 Cat Wins! 🎉';
+        return '🐱 ' + this.translationService.translate('game.controls.status.local.catWins') + ' 🎉';
       case GameStatus.DRAW:
-        return '🤝 It\'s a Draw!';
+        return '🤝 ' + this.translationService.translate('game.controls.status.local.draw');
       case GameStatus.IN_PROGRESS:
         return this.currentPlayer === Player.UNICORN 
-          ? '🦄 Unicorn\'s Turn' 
-          : '🐱 Cat\'s Turn';
+          ? '🦄 ' + this.translationService.translate('game.controls.status.local.unicornTurn')
+          : '🐱 ' + this.translationService.translate('game.controls.status.local.catTurn');
       default:
         return '';
     }
@@ -94,16 +96,20 @@ export class GameControls implements OnInit, OnDestroy {
   private getOnlineStatusMessage(): string {
     switch (this.gameStatus) {
       case GameStatus.UNICORN_WINS:
-        return this.mySymbol === 'X' ? '🎉 You Win!' : '😔 You Lose';
+        return this.mySymbol === 'X' 
+          ? '🎉 ' + this.translationService.translate('game.controls.status.online.youWin')
+          : '😔 ' + this.translationService.translate('game.controls.status.online.youLose');
       case GameStatus.CAT_WINS:
-        return this.mySymbol === 'O' ? '🎉 You Win!' : '😔 You Lose';
+        return this.mySymbol === 'O' 
+          ? '🎉 ' + this.translationService.translate('game.controls.status.online.youWin')
+          : '😔 ' + this.translationService.translate('game.controls.status.online.youLose');
       case GameStatus.DRAW:
-        return '🤝 It\'s a Draw!';
+        return '🤝 ' + this.translationService.translate('game.controls.status.online.draw');
       case GameStatus.IN_PROGRESS:
         if (this.isMyTurn) {
-          return '✨ Your Turn';
+          return '✨ ' + this.translationService.translate('game.controls.status.online.yourTurn');
         } else {
-          return '⏳ Opponent\'s Turn';
+          return '⏳ ' + this.translationService.translate('game.controls.status.online.opponentTurn');
         }
       default:
         return '';

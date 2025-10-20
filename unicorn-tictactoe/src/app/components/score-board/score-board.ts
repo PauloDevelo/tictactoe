@@ -5,6 +5,7 @@ import { takeUntil, filter } from 'rxjs/operators';
 import { Player } from '../../models/player.model';
 import { GameService } from '../../services/game.service';
 import { OnlineGameService } from '../../services/online-game.service';
+import { TranslationService } from '../../services/translation.service';
 
 @Component({
   selector: 'app-score-board',
@@ -26,7 +27,8 @@ export class ScoreBoard implements OnInit, OnDestroy {
 
   constructor(
     private gameService: GameService,
-    private onlineGameService: OnlineGameService
+    private onlineGameService: OnlineGameService,
+    public translationService: TranslationService
   ) {}
 
   ngOnInit(): void {

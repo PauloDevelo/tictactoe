@@ -8,6 +8,7 @@ import { Cell } from '../../models/cell.model';
 import { GameStatus } from '../../models/game-status.enum';
 import { GameService } from '../../services/game.service';
 import { OnlineGameService } from '../../services/online-game.service';
+import { TranslationService } from '../../services/translation.service';
 
 @Component({
   selector: 'app-game-board',
@@ -30,7 +31,8 @@ export class GameBoard implements OnInit, OnDestroy {
 
   constructor(
     private gameService: GameService,
-    private onlineGameService: OnlineGameService
+    private onlineGameService: OnlineGameService,
+    public translationService: TranslationService
   ) {}
 
   ngOnInit(): void {
