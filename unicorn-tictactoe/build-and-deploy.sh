@@ -41,10 +41,9 @@ fi
 
 # Get deployment parameters
 read -p "Enter production domain (e.g., https://example.com): " PROD_URL
-read -p "Enter server user@host (e.g., tictactoe@your-server.com): " SERVER_HOST
 
-if [ -z "$PROD_URL" ] || [ -z "$SERVER_HOST" ]; then
-    print_error "Production URL and server host are required"
+if [ -z "$PROD_URL" ];then
+    print_error "Production URL is required"
     exit 1
 fi
 
@@ -91,73 +90,14 @@ fi
 
 print_status "Build completed successfully"
 
-# Create deployment package
-print_status "Creating deployment package..."
-TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-DEPLOY_DIR="deploy_${TIMESTAMP}"
-mkdir -p "$DEPLOY_DIR"
-
-# Copy build files
-cp -r dist/unicorn-tictactoe/browser/* "$DEPLOY_DIR/"
-
-# Create deployment archive
-tar -czf "${DEPLOY_DIR}.tar.gz" "$DEPLOY_DIR"
-print_status "Deployment package created: ${DEPLOY_DIR}.tar.gz"
-
-# Upload to server
-print_status "Uploading to server..."
-scp "${DEPLOY_DIR}.tar.gz" "${SERVER_HOST}:~/deployments/"
-
-if [ $? -ne 0 ]; then
-    print_error "Failed to upload to server"
-    exit 1
-fi
-
-print_status "Upload completed"
-
-# Deploy on server
-print_status "Deploying on server..."
-ssh "$SERVER_HOST" << ENDSSH
-set -e
-
-cd ~/deployments
-
-# Extract new version
-tar -xzf ${DEPLOY_DIR}.tar.gz
-
-# Backup current version
-if [ -d /var/www/tictactoe/frontend ] && [ "\$(ls -A /var/www/tictactoe/frontend)" ]; then
-    echo "Creating backup of current version..."
-    BACKUP_NAME="frontend_backup_${TIMESTAMP}"
-    mkdir -p ~/backups
-    sudo cp -r /var/www/tictactoe/frontend ~/backups/\${BACKUP_NAME}
-    echo "Backup created: ~/backups/\${BACKUP_NAME}"
-fi
-
-# Deploy new version
-echo "Deploying new version..."
+# Copy build 
+print_status "Copy to /var/www/tictactoe/frontend folder..."
 sudo rm -rf /var/www/tictactoe/frontend/*
-sudo cp -r ${DEPLOY_DIR}/* /var/www/tictactoe/frontend/
+sudo cp -r dist/unicorn-tictactoe/browser/* /var/www/tictactoe/frontend 
 
 # Set permissions
 sudo chown -R tictactoe:tictactoe /var/www/tictactoe/frontend
 sudo chmod -R 755 /var/www/tictactoe/frontend
-
-# Cleanup
-rm -rf ${DEPLOY_DIR}
-rm -f ${DEPLOY_DIR}.tar.gz
-
-echo "Deployment completed successfully"
-ENDSSH
-
-if [ $? -ne 0 ]; then
-    print_error "Deployment failed on server"
-    exit 1
-fi
-
-# Cleanup local files
-rm -rf "$DEPLOY_DIR"
-rm -f "${DEPLOY_DIR}.tar.gz"
 
 echo ""
 echo "========================================="
