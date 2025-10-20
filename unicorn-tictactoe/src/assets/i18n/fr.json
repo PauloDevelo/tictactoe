@@ -194,5 +194,19 @@
         "clickToPlace": "cliquez pour placer {{player}}"
       }
     }
+  },
+  "errors": {
+    "websocket": {
+      "notConnected": "WebSocket non connecté"
+    },
+    "game": {
+      "noActiveGame": "Aucune partie active",
+      "notYourTurn": "Ce n'est pas votre tour",
+      "invalidGameState": "État de jeu invalide",
+      "cellOccupied": "Case déjà occupée",
+      "joinRoomFailed": "Échec de la connexion à la salle : {{message}}",
+      "moveFailed": "Échec du coup : {{message}}",
+      "resetFailed": "Échec de la réinitialisation : {{message}}"
+    }
   }
 }

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { TranslationService } from './translation.service';
 
 // Backend data types (matching server models)
 export type CellValue = 'X' | 'O' | null;
@@ -63,7 +64,7 @@ export class WebSocketService {
   private gameOver$ = new Subject<GameOverEvent>();
   private error$ = new Subject<ErrorEvent>();
 
-  constructor() {}
+  constructor(private translationService: TranslationService) {}
 
   /**
    * Initialize WebSocket connection
@@ -181,7 +182,7 @@ export class WebSocketService {
    */
   joinRoom(roomId: string, playerName: string): void {
     if (!this.socket?.connected) {
-      throw new Error('WebSocket not connected');
+      throw new Error(this.translationService.translate('errors.websocket.notConnected'));
     }
     console.log('Emitting room:join with:', { roomId, playerName });
     this.socket.emit('room:join', { roomId, playerName });
@@ -192,7 +193,7 @@ export class WebSocketService {
    */
   makeMove(roomId: string, position: number): void {
     if (!this.socket?.connected) {
-      throw new Error('WebSocket not connected');
+      throw new Error(this.translationService.translate('errors.websocket.notConnected'));
     }
     console.log('Emitting game:move with:', { roomId, position });
     this.socket.emit('game:move', { roomId, position });
@@ -203,7 +204,7 @@ export class WebSocketService {
    */
   leaveRoom(roomId: string): void {
     if (!this.socket?.connected) {
-      throw new Error('WebSocket not connected');
+      throw new Error(this.translationService.translate('errors.websocket.notConnected'));
     }
     console.log('Emitting room:leave with:', { roomId });
     this.socket.emit('room:leave', { roomId });
@@ -214,7 +215,7 @@ export class WebSocketService {
    */
   resetGame(roomId: string): void {
     if (!this.socket?.connected) {
-      throw new Error('WebSocket not connected');
+      throw new Error(this.translationService.translate('errors.websocket.notConnected'));
     }
     console.log('Emitting game:reset with:', { roomId });
     this.socket.emit('game:reset', { roomId });

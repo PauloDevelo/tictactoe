@@ -9,9 +9,11 @@ import {
   BackendPlayer,
   BackendGameState
 } from './websocket.service';
+import { TranslationService } from './translation.service';
 
 describe('WebSocketService', () => {
   let service: WebSocketService;
+  let mockTranslationService: jasmine.SpyObj<TranslationService>;
 
   const createMockPlayer = (id: string, name: string, symbol: 'X' | 'O'): BackendPlayer => ({
     id,
@@ -29,8 +31,15 @@ describe('WebSocketService', () => {
   });
 
   beforeEach(() => {
+    // Create mock TranslationService
+    mockTranslationService = jasmine.createSpyObj('TranslationService', ['translate']);
+    mockTranslationService.translate.and.returnValue('errors.websocket.notConnected');
+
     TestBed.configureTestingModule({
-      providers: [WebSocketService]
+      providers: [
+        WebSocketService,
+        { provide: TranslationService, useValue: mockTranslationService }
+      ]
     });
 
     service = TestBed.inject(WebSocketService);
@@ -62,7 +71,8 @@ describe('WebSocketService', () => {
       const mockData: RoomJoinedEvent = {
         roomId: 'room123',
         player: createMockPlayer('player1', 'Alice', 'X'),
-        gameState: createMockGameState('waiting')
+        gameState: createMockGameState('waiting'),
+        allPlayers: [createMockPlayer('player1', 'Alice', 'X')]
       };
 
       service.onRoomJoined().subscribe((data) => {
@@ -146,19 +156,19 @@ describe('WebSocketService', () => {
     it('should throw error when joining room without connection', () => {
       expect(() => {
         service.joinRoom('room123', 'Alice');
-      }).toThrowError('WebSocket not connected');
+      }).toThrowError('errors.websocket.notConnected');
     });
 
     it('should throw error when making move without connection', () => {
       expect(() => {
         service.makeMove('room123', 4);
-      }).toThrowError('WebSocket not connected');
+      }).toThrowError('errors.websocket.notConnected');
     });
 
     it('should throw error when leaving room without connection', () => {
       expect(() => {
         service.leaveRoom('room123');
-      }).toThrowError('WebSocket not connected');
+      }).toThrowError('errors.websocket.notConnected');
     });
   });
 

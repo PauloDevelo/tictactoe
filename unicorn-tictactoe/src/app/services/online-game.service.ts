@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { WebSocketService, BackendGameState, BackendPlayer } from './websocket.service';
+import { TranslationService } from './translation.service';
 import { GameState } from '../models/game-state.model';
 import { Player } from '../models/player.model';
 import { GameStatus } from '../models/game-status.enum';
@@ -27,7 +28,10 @@ export class OnlineGameService {
   // Cleanup subject
   private destroy$ = new Subject<void>();
 
-  constructor(private wsService: WebSocketService) {
+  constructor(
+    private wsService: WebSocketService,
+    private translationService: TranslationService
+  ) {
     this.initializeWebSocketListeners();
   }
 
@@ -101,7 +105,7 @@ export class OnlineGameService {
       this.wsService.joinRoom(roomId, playerName);
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
-      this.errorMessage$.next(`Failed to join room: ${message}`);
+      this.errorMessage$.next(this.translationService.translate('errors.game.joinRoomFailed', { message }));
     }
   }
 
@@ -112,23 +116,23 @@ export class OnlineGameService {
     const gameInfo = this.onlineGameInfo$.value;
     
     if (!gameInfo) {
-      this.errorMessage$.next('No active game');
+      this.errorMessage$.next(this.translationService.translate('errors.game.noActiveGame'));
       return;
     }
 
     if (!gameInfo.isMyTurn) {
-      this.errorMessage$.next('Not your turn');
+      this.errorMessage$.next(this.translationService.translate('errors.game.notYourTurn'));
       return;
     }
 
     const currentState = this.gameState$.value;
     if (!currentState) {
-      this.errorMessage$.next('Invalid game state');
+      this.errorMessage$.next(this.translationService.translate('errors.game.invalidGameState'));
       return;
     }
 
     if (currentState.board[position] !== null) {
-      this.errorMessage$.next('Cell already occupied');
+      this.errorMessage$.next(this.translationService.translate('errors.game.cellOccupied'));
       return;
     }
 
@@ -136,7 +140,7 @@ export class OnlineGameService {
       this.wsService.makeMove(gameInfo.roomId, position);
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
-      this.errorMessage$.next(`Failed to make move: ${message}`);
+      this.errorMessage$.next(this.translationService.translate('errors.game.moveFailed', { message }));
     }
   }
 
@@ -164,7 +168,7 @@ export class OnlineGameService {
     const gameInfo = this.onlineGameInfo$.value;
     
     if (!gameInfo) {
-      this.errorMessage$.next('No active game');
+      this.errorMessage$.next(this.translationService.translate('errors.game.noActiveGame'));
       return;
     }
 
@@ -172,7 +176,7 @@ export class OnlineGameService {
       this.wsService.resetGame(gameInfo.roomId);
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
-      this.errorMessage$.next(`Failed to reset game: ${message}`);
+      this.errorMessage$.next(this.translationService.translate('errors.game.resetFailed', { message }));
     }
   }
 

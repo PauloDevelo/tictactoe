@@ -194,5 +194,19 @@
         "clickToPlace": "click to place {{player}}"
       }
     }
+  },
+  "errors": {
+    "websocket": {
+      "notConnected": "WebSocket not connected"
+    },
+    "game": {
+      "noActiveGame": "No active game",
+      "notYourTurn": "Not your turn",
+      "invalidGameState": "Invalid game state",
+      "cellOccupied": "Cell already occupied",
+      "joinRoomFailed": "Failed to join room: {{message}}",
+      "moveFailed": "Failed to make move: {{message}}",
+      "resetFailed": "Failed to reset game: {{message}}"
+    }
   }
 }

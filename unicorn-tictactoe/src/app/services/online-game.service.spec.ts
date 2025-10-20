@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { OnlineGameService, OnlineGameInfo } from './online-game.service';
 import { WebSocketService, BackendGameState, BackendPlayer, RoomJoinedEvent, PlayerJoinedEvent, GameUpdateEvent, GameOverEvent, ErrorEvent } from './websocket.service';
+import { TranslationService } from './translation.service';
 import { Subject, BehaviorSubject } from 'rxjs';
 import { GameState } from '../models/game-state.model';
 import { Player } from '../models/player.model';
@@ -9,6 +10,7 @@ import { GameStatus } from '../models/game-status.enum';
 describe('OnlineGameService', () => {
   let service: OnlineGameService;
   let mockWebSocketService: jasmine.SpyObj<WebSocketService>;
+  let mockTranslationService: jasmine.SpyObj<TranslationService>;
   
   // Mock subjects for WebSocket events
   let connectionStatusSubject: BehaviorSubject<boolean>;
@@ -51,10 +53,21 @@ describe('OnlineGameService', () => {
     mockWebSocketService.onError = jasmine.createSpy('onError')
       .and.returnValue(errorSubject.asObservable());
 
+    // Create mock TranslationService
+    mockTranslationService = jasmine.createSpyObj('TranslationService', ['translate']);
+    mockTranslationService.translate.and.callFake((key: string, params?: any) => {
+      // Return the key with params for testing
+      if (params) {
+        return `${key}:${JSON.stringify(params)}`;
+      }
+      return key;
+    });
+
     TestBed.configureTestingModule({
       providers: [
         OnlineGameService,
-        { provide: WebSocketService, useValue: mockWebSocketService }
+        { provide: WebSocketService, useValue: mockWebSocketService },
+        { provide: TranslationService, useValue: mockTranslationService }
       ]
     });
 
@@ -117,7 +130,8 @@ describe('OnlineGameService', () => {
       roomJoinedSubject.next({
         roomId: 'room1',
         player: mockPlayer,
-        gameState: mockGameState
+        gameState: mockGameState,
+        allPlayers: [mockPlayer]
       });
 
       // Wait a bit for state to update
@@ -170,7 +184,8 @@ describe('OnlineGameService', () => {
       roomJoinedSubject.next({
         roomId: 'room1',
         player: mockPlayer,
-        gameState: mockGameState
+        gameState: mockGameState,
+        allPlayers: [mockPlayer]
       });
     });
 
@@ -201,7 +216,8 @@ describe('OnlineGameService', () => {
       roomJoinedSubject.next({
         roomId: 'room1',
         player: player1,
-        gameState: mockGameState
+        gameState: mockGameState,
+        allPlayers: [player1]
       });
 
       // Then second player joins
@@ -239,7 +255,8 @@ describe('OnlineGameService', () => {
       roomJoinedSubject.next({
         roomId: 'room1',
         player: mockPlayer,
-        gameState: mockGameState
+        gameState: mockGameState,
+        allPlayers: [mockPlayer]
       });
 
       setTimeout(() => {
@@ -281,7 +298,8 @@ describe('OnlineGameService', () => {
       roomJoinedSubject.next({
         roomId: 'room1',
         player: mockPlayer,
-        gameState: mockGameState
+        gameState: mockGameState,
+        allPlayers: [mockPlayer]
       });
     });
 
@@ -312,7 +330,8 @@ describe('OnlineGameService', () => {
       roomJoinedSubject.next({
         roomId: 'room1',
         player: mockPlayer,
-        gameState: initialGameState
+        gameState: initialGameState,
+        allPlayers: [mockPlayer]
       });
 
       setTimeout(() => {
@@ -357,7 +376,8 @@ describe('OnlineGameService', () => {
       roomJoinedSubject.next({
         roomId: 'room1',
         player: mockPlayer,
-        gameState: initialGameState
+        gameState: initialGameState,
+        allPlayers: [mockPlayer]
       });
 
       setTimeout(() => {
@@ -404,7 +424,8 @@ describe('OnlineGameService', () => {
       roomJoinedSubject.next({
         roomId: 'room1',
         player: mockPlayer,
-        gameState: initialGameState
+        gameState: initialGameState,
+        allPlayers: [mockPlayer]
       });
 
       setTimeout(() => {
@@ -445,7 +466,8 @@ describe('OnlineGameService', () => {
       roomJoinedSubject.next({
         roomId: 'room1',
         player: mockPlayer,
-        gameState: mockGameState
+        gameState: mockGameState,
+        allPlayers: [mockPlayer]
       });
 
       setTimeout(() => {
@@ -474,12 +496,13 @@ describe('OnlineGameService', () => {
       roomJoinedSubject.next({
         roomId: 'room1',
         player: mockPlayer,
-        gameState: mockGameState
+        gameState: mockGameState,
+        allPlayers: [mockPlayer]
       });
 
       setTimeout(() => {
         service.getErrorMessages().subscribe(error => {
-          expect(error).toBe('Not your turn');
+          expect(error).toBe('errors.game.notYourTurn');
           done();
         });
 
@@ -507,12 +530,13 @@ describe('OnlineGameService', () => {
       roomJoinedSubject.next({
         roomId: 'room1',
         player: mockPlayer,
-        gameState: mockGameState
+        gameState: mockGameState,
+        allPlayers: [mockPlayer]
       });
 
       setTimeout(() => {
         service.getErrorMessages().subscribe(error => {
-          expect(error).toBe('Cell already occupied');
+          expect(error).toBe('errors.game.cellOccupied');
           done();
         });
 
@@ -523,7 +547,7 @@ describe('OnlineGameService', () => {
 
     it('should not allow move when no active game', (done) => {
       service.getErrorMessages().subscribe(error => {
-        expect(error).toBe('No active game');
+        expect(error).toBe('errors.game.noActiveGame');
         done();
       });
 
@@ -559,7 +583,8 @@ describe('OnlineGameService', () => {
       roomJoinedSubject.next({
         roomId: 'room1',
         player: mockPlayer,
-        gameState: mockGameState
+        gameState: mockGameState,
+        allPlayers: [mockPlayer]
       });
     });
 
@@ -590,7 +615,8 @@ describe('OnlineGameService', () => {
       roomJoinedSubject.next({
         roomId: 'room1',
         player: mockPlayer,
-        gameState: initialGameState
+        gameState: initialGameState,
+        allPlayers: [mockPlayer]
       });
 
       setTimeout(() => {
@@ -624,7 +650,7 @@ describe('OnlineGameService', () => {
       mockWebSocketService.joinRoom.and.throwError('Connection error');
 
       service.getErrorMessages().subscribe(error => {
-        expect(error).toContain('Failed to join room');
+        expect(error).toContain('errors.game.joinRoomFailed');
         done();
       });
 
@@ -652,12 +678,13 @@ describe('OnlineGameService', () => {
       roomJoinedSubject.next({
         roomId: 'room1',
         player: mockPlayer,
-        gameState: mockGameState
+        gameState: mockGameState,
+        allPlayers: [mockPlayer]
       });
 
       setTimeout(() => {
         service.getErrorMessages().subscribe(error => {
-          expect(error).toContain('Failed to make move');
+          expect(error).toContain('errors.game.moveFailed');
           done();
         });
 
@@ -686,7 +713,8 @@ describe('OnlineGameService', () => {
       roomJoinedSubject.next({
         roomId: 'room1',
         player: mockPlayer,
-        gameState: mockGameState
+        gameState: mockGameState,
+        allPlayers: [mockPlayer]
       });
 
       setTimeout(() => {
@@ -716,7 +744,8 @@ describe('OnlineGameService', () => {
       roomJoinedSubject.next({
         roomId: 'room1',
         player: mockPlayer,
-        gameState: mockGameState
+        gameState: mockGameState,
+        allPlayers: [mockPlayer]
       });
 
       setTimeout(() => {
