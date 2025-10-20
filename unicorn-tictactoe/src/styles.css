@@ -1,0 +1,41 @@
+/* Import Google Fonts - Child-friendly fonts */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@400;600;700&display=swap');
+
+/* CSS Variables for Unicorn Theme */
+:root {
+  --unicorn-pink: #FF69B4;
+  --cat-purple: #9370DB;
+  --background: #FFF0F5;
+  --text-dark: #4A4A4A;
+  --white: #FFFFFF;
+  --shadow: rgba(0, 0, 0, 0.1);
+  --glow-pink: rgba(255, 105, 180, 0.6);
+  --glow-purple: rgba(147, 112, 219, 0.6);
+}
+
+/* Global Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body Styling */
+body {
+  font-family: 'Quicksand', sans-serif;
+  background: linear-gradient(135deg, #FFF0F5 0%, #E6E6FA 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  color: var(--text-dark);
+  padding: 0;
+}
+
+/* Headings use playful font */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Fredoka One', cursive;
+}
+
+/* Smooth transitions for interactive elements only */
+button, a, .cell, .player-score {
+  transition: all 0.2s ease;
+}

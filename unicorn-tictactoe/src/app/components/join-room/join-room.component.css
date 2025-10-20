@@ -1,0 +1,145 @@
+.join-room-container {
+  background: white;
+  border-radius: 10px;
+  padding: 25px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.join-room-container h3 {
+  margin: 0 0 20px 0;
+  color: #333;
+  font-size: 24px;
+  text-align: center;
+}
+
+.join-room-form {
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #555;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.room-id-input,
+.player-name-input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+  box-sizing: border-box;
+}
+
+.room-id-input {
+  text-transform: uppercase;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.room-id-input:focus,
+.player-name-input:focus {
+  outline: none;
+  border-color: #2196F3;
+}
+
+.room-id-input:disabled,
+.player-name-input:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.input-hint {
+  margin-top: 5px;
+  font-size: 12px;
+  color: #999;
+  text-align: right;
+}
+
+.error-message {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 12px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  border-left: 4px solid #c62828;
+  font-size: 14px;
+}
+
+.join-button {
+  width: 100%;
+  padding: 14px;
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.1s;
+}
+
+.join-button:hover:not(:disabled) {
+  background-color: #1976D2;
+  transform: translateY(-1px);
+}
+
+.join-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.join-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.info-box {
+  background-color: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 5px;
+  padding: 15px;
+  margin-top: 20px;
+}
+
+.info-box p {
+  margin: 0 0 10px 0;
+  color: #856404;
+  font-weight: 500;
+}
+
+.info-box ul {
+  margin: 0;
+  padding-left: 20px;
+  color: #555;
+}
+
+.info-box li {
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.info-box li:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .join-room-container {
+    padding: 20px;
+  }
+
+  .join-room-container h3 {
+    font-size: 20px;
+  }
+}

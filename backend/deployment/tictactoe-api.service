@@ -1,0 +1,45 @@
+[Unit]
+Description=Tic-Tac-Toe API Server
+Documentation=https://github.com/yourusername/tictactoe
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=forking
+User=root
+Group=root
+WorkingDirectory=/opt/tictactoe-backend/backend
+
+# Environment
+Environment=NODE_ENV=production
+Environment=PORT=3000
+
+# PM2 commands
+ExecStart=/usr/bin/pm2 start deployment/ecosystem.config.js --no-daemon
+ExecReload=/usr/bin/pm2 reload deployment/ecosystem.config.js
+ExecStop=/usr/bin/pm2 stop deployment/ecosystem.config.js
+
+# Restart policy
+Restart=on-failure
+RestartSec=10
+StartLimitInterval=200
+StartLimitBurst=5
+
+# Security
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/tictactoe-backend
+
+# Resource limits
+LimitNOFILE=65536
+LimitNPROC=4096
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=tictactoe-api
+
+[Install]
+WantedBy=multi-user.target

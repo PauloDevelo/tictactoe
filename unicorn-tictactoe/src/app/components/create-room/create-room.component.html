@@ -1,0 +1,62 @@
+<div class="create-room-container">
+  <h3>🎯 Create New Room</h3>
+  
+  <form (submit)="onSubmit($event)" class="create-room-form">
+    <div class="form-group">
+      <label for="roomName">Room Name</label>
+      <input
+        type="text"
+        id="roomName"
+        name="roomName"
+        [(ngModel)]="roomName"
+        (input)="clearError()"
+        placeholder="Enter room name..."
+        [disabled]="creating"
+        class="room-name-input"
+        maxlength="50"
+      />
+      <div class="input-hint">
+        {{ roomName.length }}/50 characters
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="playerName">Your Name</label>
+      <input
+        type="text"
+        id="playerName"
+        name="playerName"
+        [(ngModel)]="playerName"
+        (input)="clearError()"
+        placeholder="Enter your name..."
+        [disabled]="creating"
+        class="player-name-input"
+        maxlength="20"
+      />
+      <div class="input-hint">
+        {{ playerName.length }}/20 characters
+      </div>
+    </div>
+
+    <div *ngIf="error" class="error-message">
+      ⚠️ {{ error }}
+    </div>
+
+    <button
+      type="submit"
+      class="create-button"
+      [disabled]="creating || !roomName.trim() || !playerName.trim()"
+    >
+      {{ creating ? '⏳ Creating...' : '✨ Create Room' }}
+    </button>
+  </form>
+
+  <div class="info-box">
+    <p><strong>💡 Tips:</strong></p>
+    <ul>
+      <li>Choose a descriptive name for your room (3-50 characters)</li>
+      <li>Enter your player name (2-20 characters)</li>
+      <li>Share the Room ID with your friend to play together</li>
+    </ul>
+  </div>
+</div>

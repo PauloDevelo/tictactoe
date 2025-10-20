@@ -1,0 +1,15 @@
+<div 
+  class="game-board" 
+  role="grid" 
+  aria-label="Tic-tac-toe game board"
+>
+  <app-game-cell
+    *ngFor="let cell of cells; let i = index"
+    [player]="getCellPlayer(i)"
+    [currentPlayer]="currentPlayer"
+    [isGameOver]="isGameOver"
+    [isWinningCell]="isWinningCell(i)"
+    [cellIndex]="i"
+    (cellClicked)="onCellClick(i)"
+  ></app-game-cell>
+</div>

@@ -1,0 +1,20 @@
+<div class="game-controls">
+  <div 
+    class="status-message" 
+    [ngClass]="statusClass"
+    role="status"
+    aria-live="polite"
+    aria-atomic="true"
+  >
+    {{ statusMessage }}
+  </div>
+
+  <button 
+    class="reset-button"
+    (click)="onResetClick()"
+    [class.game-over]="isGameOver"
+    [attr.aria-label]="isGameOver ? 'Start a new game' : 'Reset current game'"
+  >
+    {{ isGameOver ? '🎮 New Game' : '🔄 Reset Game' }}
+  </button>
+</div>

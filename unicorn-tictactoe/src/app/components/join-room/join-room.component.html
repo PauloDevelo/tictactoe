@@ -1,0 +1,62 @@
+<div class="join-room-container">
+  <h3>🚪 Join Existing Room</h3>
+  
+  <form (submit)="onSubmit($event)" class="join-room-form">
+    <div class="form-group">
+      <label for="roomId">Room ID</label>
+      <input
+        type="text"
+        id="roomId"
+        name="roomId"
+        [(ngModel)]="roomId"
+        (input)="clearError(); formatRoomId()"
+        placeholder="Enter 6-character room ID..."
+        [disabled]="joining"
+        class="room-id-input"
+        maxlength="6"
+      />
+      <div class="input-hint">
+        {{ roomId.length }}/6 characters
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="playerName">Your Name</label>
+      <input
+        type="text"
+        id="playerName"
+        name="playerName"
+        [(ngModel)]="playerName"
+        (input)="clearError()"
+        placeholder="Enter your name..."
+        [disabled]="joining"
+        class="player-name-input"
+        maxlength="20"
+      />
+      <div class="input-hint">
+        {{ playerName.length }}/20 characters
+      </div>
+    </div>
+
+    <div *ngIf="error" class="error-message">
+      ⚠️ {{ error }}
+    </div>
+
+    <button
+      type="submit"
+      class="join-button"
+      [disabled]="joining || !roomId.trim() || !playerName.trim()"
+    >
+      {{ joining ? '⏳ Joining...' : '🎮 Join Room' }}
+    </button>
+  </form>
+
+  <div class="info-box">
+    <p><strong>💡 How to join:</strong></p>
+    <ul>
+      <li>Get the 6-character Room ID from your friend</li>
+      <li>Enter your player name (2-20 characters)</li>
+      <li>Click "Join Room" to start playing</li>
+    </ul>
+  </div>
+</div>

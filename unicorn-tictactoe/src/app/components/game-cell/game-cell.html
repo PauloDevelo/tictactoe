@@ -1,0 +1,19 @@
+<div 
+  class="cell"
+  role="gridcell"
+  [attr.aria-label]="ariaLabel"
+  [attr.aria-disabled]="isDisabled"
+  [attr.tabindex]="isDisabled ? -1 : 0"
+  [class.disabled]="isDisabled"
+  [class.unicorn-preview]="!isDisabled && currentPlayer === 'unicorn'"
+  [class.cat-preview]="!isDisabled && currentPlayer === 'cat'"
+  [class.winning]="isWinningCell"
+  [class.unicorn-win]="isWinningCell && player === 'unicorn'"
+  [class.cat-win]="isWinningCell && player === 'cat'"
+  (click)="onClick()"
+  (keydown.enter)="onKeyPress($event)"
+  (keydown.space)="onKeyPress($event)"
+>
+  <span class="icon" *ngIf="player">{{ displayIcon }}</span>
+  <span class="preview-icon" *ngIf="!player && !isGameOver">{{ previewIcon }}</span>
+</div>

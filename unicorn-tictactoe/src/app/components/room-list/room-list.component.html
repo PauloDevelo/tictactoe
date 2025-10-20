@@ -1,0 +1,108 @@
+<div class="room-list-container">
+  <div class="room-list-header">
+    <h2>🎮 Game Rooms</h2>
+    <button class="refresh-button" (click)="loadRooms()" [disabled]="loading">
+      {{ loading ? '⏳ Loading...' : '🔄 Refresh' }}
+    </button>
+  </div>
+
+  <div *ngIf="error" class="error-message">
+    ⚠️ {{ error }}
+  </div>
+
+  <div *ngIf="!loading && rooms.length === 0" class="empty-state">
+    <p>No rooms available. Create one to get started!</p>
+  </div>
+
+  <!-- Available Rooms -->
+  <div *ngIf="getAvailableRooms().length > 0" class="room-section">
+    <h3>Available Rooms</h3>
+    <div class="room-grid">
+      <div *ngFor="let room of getAvailableRooms(); trackBy: trackByRoomId" class="room-card">
+        <div class="room-header">
+          <h4>{{ room.name }}</h4>
+          <span class="status-badge" [ngClass]="getStatusClass(room.status)">
+            {{ room.status }}
+          </span>
+        </div>
+        <div class="room-info">
+          <div class="info-item">
+            <span class="label">Room ID:</span>
+            <span class="value">{{ room.id }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Players:</span>
+            <span class="value">{{ room.players.length }}/2</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Available Slots:</span>
+            <span class="value">{{ getAvailableSlots(room) }}</span>
+          </div>
+        </div>
+        <div class="room-players" *ngIf="room.players.length > 0">
+          <div *ngFor="let player of room.players" class="player-info">
+            <span class="player-symbol">{{ player.symbol }}</span>
+            <span class="player-name">{{ player.name }}</span>
+            <span class="player-ready" *ngIf="player.isReady">✓</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Active Rooms -->
+  <div *ngIf="getActiveRooms().length > 0" class="room-section">
+    <h3>Active Games</h3>
+    <div class="room-grid">
+      <div *ngFor="let room of getActiveRooms(); trackBy: trackByRoomId" class="room-card active">
+        <div class="room-header">
+          <h4>{{ room.name }}</h4>
+          <span class="status-badge" [ngClass]="getStatusClass(room.status)">
+            {{ room.status }}
+          </span>
+        </div>
+        <div class="room-info">
+          <div class="info-item">
+            <span class="label">Room ID:</span>
+            <span class="value">{{ room.id }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Current Turn:</span>
+            <span class="value">{{ room.gameState.currentTurn }}</span>
+          </div>
+        </div>
+        <div class="room-players">
+          <div *ngFor="let player of room.players" class="player-info">
+            <span class="player-symbol">{{ player.symbol }}</span>
+            <span class="player-name">{{ player.name }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Finished Rooms -->
+  <div *ngIf="getFinishedRooms().length > 0" class="room-section">
+    <h3>Finished Games</h3>
+    <div class="room-grid">
+      <div *ngFor="let room of getFinishedRooms(); trackBy: trackByRoomId" class="room-card finished">
+        <div class="room-header">
+          <h4>{{ room.name }}</h4>
+          <span class="status-badge" [ngClass]="getStatusClass(room.status)">
+            {{ room.status }}
+          </span>
+        </div>
+        <div class="room-info">
+          <div class="info-item">
+            <span class="label">Room ID:</span>
+            <span class="value">{{ room.id }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Winner:</span>
+            <span class="value">{{ room.gameState.winner || 'Draw' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

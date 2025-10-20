@@ -1,0 +1,16 @@
+<div class="game-mode-selector">
+  <h2 class="selector-title">Choose Game Mode</h2>
+  
+  <div class="mode-cards">
+    <div 
+      *ngFor="let gameMode of gameModes"
+      class="mode-card"
+      (click)="selectMode(gameMode.mode)"
+      [attr.data-mode]="gameMode.mode"
+    >
+      <div class="mode-icon">{{ gameMode.icon }}</div>
+      <h3 class="mode-title">{{ gameMode.title }}</h3>
+      <p class="mode-description">{{ gameMode.description }}</p>
+    </div>
+  </div>
+</div>

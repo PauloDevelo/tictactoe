@@ -1,0 +1,166 @@
+.score-board {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  margin: 20px auto;
+  max-width: 600px;
+  padding: 20px;
+}
+
+.player-score {
+  flex: 1;
+  background: var(--white);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+  border: 3px solid transparent;
+  position: relative;
+}
+
+.player-score.unicorn {
+  border-color: var(--unicorn-pink);
+}
+
+.player-score.cat {
+  border-color: var(--cat-purple);
+}
+
+.player-score.active {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.player-score.unicorn.active {
+  box-shadow: 0 6px 20px rgba(255, 105, 180, 0.4);
+}
+
+.player-score.cat.active {
+  box-shadow: 0 6px 20px rgba(147, 112, 219, 0.4);
+}
+
+.player-icon {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.player-info {
+  margin-bottom: 10px;
+}
+
+.player-name {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.player-score.unicorn .player-name {
+  color: var(--unicorn-pink);
+}
+
+.player-score.cat .player-name {
+  color: var(--cat-purple);
+}
+
+.score {
+  font-size: 36px;
+  font-weight: bold;
+  color: var(--text-dark);
+}
+
+.vs-divider {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--text-dark);
+  opacity: 0.5;
+}
+
+.turn-indicator {
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.player-score.unicorn .turn-indicator {
+  color: var(--unicorn-pink);
+}
+
+.player-score.cat .turn-indicator {
+  color: var(--cat-purple);
+}
+
+.pulse {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+@media (max-width: 768px) {
+  .score-board {
+    gap: 20px;
+    padding: 15px;
+  }
+
+  .player-score {
+    padding: 15px;
+  }
+
+  .player-icon {
+    font-size: 42px;
+  }
+
+  .player-name {
+    font-size: 18px;
+  }
+
+  .score {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 480px) {
+  .score-board {
+    flex-direction: column;
+    gap: 15px;
+    padding: 10px;
+  }
+
+  .player-score {
+    padding: 15px;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .vs-divider {
+    transform: rotate(90deg);
+    font-size: 20px;
+  }
+
+  .player-icon {
+    font-size: 40px;
+  }
+
+  .player-name {
+    font-size: 16px;
+  }
+
+  .score {
+    font-size: 28px;
+  }
+
+  .turn-indicator {
+    font-size: 12px;
+  }
+}
