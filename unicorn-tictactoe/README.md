@@ -13,6 +13,7 @@ A magical, accessible, and delightful Tic-Tac-Toe game built with Angular 20! Pl
 - 🎮 **Dual Game Modes** - Play locally or online multiplayer
 - 🦄 **Magical Theme** - Unicorn vs Cat with delightful animations
 - 🌐 **Real-time Multiplayer** - Play with friends anywhere via WebSocket
+- 🌍 **Internationalization** - Automatic language detection (English/French)
 - ♿ **Fully Accessible** - WCAG 2.1 Level AA compliant
 - ⌨️ **Keyboard Navigation** - Complete keyboard support (Tab, Enter, Space)
 - 📱 **Responsive Design** - Works on desktop, tablet, and mobile
@@ -247,6 +248,41 @@ npx tsc --noEmit
 | GameCell | 100% | 100% | 100% | 100% |
 | GameControls | 100% | 100% | 100% | 100% |
 | ScoreBoard | 100% | 100% | 100% | 100% |
+
+## 🌍 Internationalization (i18n)
+
+The application automatically detects your browser's language and displays the interface accordingly.
+
+### Supported Languages
+- **English (en)** - Default language
+- **French (fr)** - Français (automatically detected for fr, fr-FR, fr-CA, fr-BE, fr-CH, fr-LU)
+
+### How It Works
+- Language is detected automatically from `navigator.language`
+- French browsers see the French interface
+- All other browsers default to English
+- No manual language switching required
+
+### Adding New Languages
+
+1. Create a new translation file in `src/assets/i18n/{language-code}.json`
+2. Copy the structure from `en.json` and translate all values
+3. Update `TranslationService` to support the new language code
+4. Add language detection logic in `detectBrowserLanguage()` method
+
+Example translation file structure:
+```json
+{
+  "common": {
+    "buttons": { "ok": "OK", "cancel": "Cancel", ... },
+    "labels": { "loading": "Loading...", ... }
+  },
+  "gameMode": { ... },
+  "room": { ... },
+  "game": { ... },
+  "errors": { ... }
+}
+```
 
 ## 🐛 Known Issues
 
