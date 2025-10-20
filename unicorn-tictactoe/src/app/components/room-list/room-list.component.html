@@ -1,8 +1,8 @@
 <div class="room-list-container">
   <div class="room-list-header">
-    <h2>🎮 Game Rooms</h2>
+    <h2>🎮 {{ translationService.translate('room.list.title') }}</h2>
     <button class="refresh-button" (click)="loadRooms()" [disabled]="loading">
-      {{ loading ? '⏳ Loading...' : '🔄 Refresh' }}
+      {{ loading ? '⏳ ' + translationService.translate('room.list.loading') : '🔄 ' + translationService.translate('room.list.refreshButton') }}
     </button>
   </div>
 
@@ -11,31 +11,31 @@
   </div>
 
   <div *ngIf="!loading && rooms.length === 0" class="empty-state">
-    <p>No rooms available. Create one to get started!</p>
+    <p>{{ translationService.translate('room.list.emptyState') }}</p>
   </div>
 
   <!-- Available Rooms -->
   <div *ngIf="getAvailableRooms().length > 0" class="room-section">
-    <h3>Available Rooms</h3>
+    <h3>{{ translationService.translate('room.list.availableRooms') }}</h3>
     <div class="room-grid">
       <div *ngFor="let room of getAvailableRooms(); trackBy: trackByRoomId" class="room-card">
         <div class="room-header">
           <h4>{{ room.name }}</h4>
           <span class="status-badge" [ngClass]="getStatusClass(room.status)">
-            {{ room.status }}
+            {{ translationService.translate('room.list.status.' + room.status) }}
           </span>
         </div>
         <div class="room-info">
           <div class="info-item">
-            <span class="label">Room ID:</span>
+            <span class="label">{{ translationService.translate('room.list.roomId') }}:</span>
             <span class="value">{{ room.id }}</span>
           </div>
           <div class="info-item">
-            <span class="label">Players:</span>
+            <span class="label">{{ translationService.translate('room.list.players') }}:</span>
             <span class="value">{{ room.players.length }}/2</span>
           </div>
           <div class="info-item">
-            <span class="label">Available Slots:</span>
+            <span class="label">{{ translationService.translate('room.list.availableSlots') }}:</span>
             <span class="value">{{ getAvailableSlots(room) }}</span>
           </div>
         </div>
@@ -52,22 +52,22 @@
 
   <!-- Active Rooms -->
   <div *ngIf="getActiveRooms().length > 0" class="room-section">
-    <h3>Active Games</h3>
+    <h3>{{ translationService.translate('room.list.activeGames') }}</h3>
     <div class="room-grid">
       <div *ngFor="let room of getActiveRooms(); trackBy: trackByRoomId" class="room-card active">
         <div class="room-header">
           <h4>{{ room.name }}</h4>
           <span class="status-badge" [ngClass]="getStatusClass(room.status)">
-            {{ room.status }}
+            {{ translationService.translate('room.list.status.' + room.status) }}
           </span>
         </div>
         <div class="room-info">
           <div class="info-item">
-            <span class="label">Room ID:</span>
+            <span class="label">{{ translationService.translate('room.list.roomId') }}:</span>
             <span class="value">{{ room.id }}</span>
           </div>
           <div class="info-item">
-            <span class="label">Current Turn:</span>
+            <span class="label">{{ translationService.translate('room.list.currentTurn') }}:</span>
             <span class="value">{{ room.gameState.currentTurn }}</span>
           </div>
         </div>
@@ -83,23 +83,23 @@
 
   <!-- Finished Rooms -->
   <div *ngIf="getFinishedRooms().length > 0" class="room-section">
-    <h3>Finished Games</h3>
+    <h3>{{ translationService.translate('room.list.finishedGames') }}</h3>
     <div class="room-grid">
       <div *ngFor="let room of getFinishedRooms(); trackBy: trackByRoomId" class="room-card finished">
         <div class="room-header">
           <h4>{{ room.name }}</h4>
           <span class="status-badge" [ngClass]="getStatusClass(room.status)">
-            {{ room.status }}
+            {{ translationService.translate('room.list.status.' + room.status) }}
           </span>
         </div>
         <div class="room-info">
           <div class="info-item">
-            <span class="label">Room ID:</span>
+            <span class="label">{{ translationService.translate('room.list.roomId') }}:</span>
             <span class="value">{{ room.id }}</span>
           </div>
           <div class="info-item">
-            <span class="label">Winner:</span>
-            <span class="value">{{ room.gameState.winner || 'Draw' }}</span>
+            <span class="label">{{ translationService.translate('room.list.winner') }}:</span>
+            <span class="value">{{ room.gameState.winner || translationService.translate('room.list.draw') }}</span>
           </div>
         </div>
       </div>

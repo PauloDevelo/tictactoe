@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Room } from '../../services/room.service';
+import { TranslationService } from '../../services/translation.service';
 
 @Component({
   selector: 'app-room-details',
@@ -16,6 +17,8 @@ export class RoomDetailsComponent implements OnChanges {
   @Output() close = new EventEmitter<void>();
 
   showCopiedMessage = false;
+
+  constructor(public readonly translationService: TranslationService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['room'] && changes['room'].currentValue) {
@@ -52,8 +55,12 @@ export class RoomDetailsComponent implements OnChanges {
    * Handle delete room action
    */
   onDeleteRoom(): void {
-    if (this.room && confirm(`Are you sure you want to delete room "${this.room.name}"?`)) {
-      this.deleteRoom.emit(this.room.id);
+    if (this.room) {
+      const confirmMessage = this.translationService.translate('room.details.confirmDelete')
+        .replace('{roomName}', this.room.name);
+      if (confirm(confirmMessage)) {
+        this.deleteRoom.emit(this.room.id);
+      }
     }
   }
 
@@ -114,7 +121,7 @@ export class RoomDetailsComponent implements OnChanges {
     if (!this.room || !this.room.gameState.winner) return 'N/A';
     
     if (this.room.gameState.winner === 'draw') {
-      return 'Draw';
+      return this.translationService.translate('room.details.draw');
     }
 
     const winner = this.room.players.find(p => p.symbol === this.room!.gameState.winner);

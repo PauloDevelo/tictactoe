@@ -2,11 +2,13 @@ import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testin
 import { of, throwError } from 'rxjs';
 import { RoomListComponent } from './room-list.component';
 import { RoomService, Room } from '../../services/room.service';
+import { TranslationService } from '../../services/translation.service';
 
 describe('RoomListComponent', () => {
   let component: RoomListComponent;
   let fixture: ComponentFixture<RoomListComponent>;
   let mockRoomService: jasmine.SpyObj<RoomService>;
+  let mockTranslationService: jasmine.SpyObj<TranslationService>;
 
   const mockRooms: Room[] = [
     {
@@ -66,11 +68,14 @@ describe('RoomListComponent', () => {
       'isRoomFull',
       'getAvailableSlots'
     ]);
+    mockTranslationService = jasmine.createSpyObj('TranslationService', ['translate']);
+    mockTranslationService.translate.and.callFake((key: string) => key);
 
     await TestBed.configureTestingModule({
       imports: [RoomListComponent],
       providers: [
-        { provide: RoomService, useValue: mockRoomService }
+        { provide: RoomService, useValue: mockRoomService },
+        { provide: TranslationService, useValue: mockTranslationService }
       ]
     }).compileComponents();
 
@@ -114,7 +119,7 @@ describe('RoomListComponent', () => {
       component.loadRooms();
 
       setTimeout(() => {
-        expect(component.error).toBe('Failed to load rooms. Please try again.');
+        expect(component.error).toBe('room.list.errors.loadFailed');
         expect(component.loading).toBe(false);
         done();
       }, 100);

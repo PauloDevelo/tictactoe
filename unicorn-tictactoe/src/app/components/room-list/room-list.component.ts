@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Subject, interval } from 'rxjs';
 import { takeUntil, switchMap, startWith } from 'rxjs/operators';
 import { RoomService, Room } from '../../services/room.service';
+import { TranslationService } from '../../services/translation.service';
 
 @Component({
   selector: 'app-room-list',
@@ -17,7 +18,10 @@ export class RoomListComponent implements OnInit, OnDestroy {
   error: string | null = null;
   private destroy$ = new Subject<void>();
 
-  constructor(private roomService: RoomService) {}
+  constructor(
+    private roomService: RoomService,
+    public readonly translationService: TranslationService
+  ) {}
 
   ngOnInit(): void {
     // Start auto-refresh which will also do the initial load
@@ -44,7 +48,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
           this.loading = false;
         },
         error: (err) => {
-          this.error = 'Failed to load rooms. Please try again.';
+          this.error = this.translationService.translate('room.list.errors.loadFailed');
           this.loading = false;
           console.error('Error loading rooms:', err);
         }
@@ -71,7 +75,7 @@ export class RoomListComponent implements OnInit, OnDestroy {
           this.error = null;
         },
         error: (err) => {
-          this.error = 'Failed to load rooms. Please try again.';
+          this.error = this.translationService.translate('room.list.errors.loadFailed');
           this.loading = false;
           console.error('Error auto-refreshing rooms:', err);
         }

@@ -38,5 +38,103 @@
       "title": "vs AI",
       "description": "Challenge the computer opponent"
     }
+  },
+  "room": {
+    "create": {
+      "title": "Create New Room",
+      "roomName": "Room Name",
+      "roomNamePlaceholder": "Enter room name...",
+      "yourName": "Your Name",
+      "yourNamePlaceholder": "Enter your name...",
+      "createButton": "Create Room",
+      "creating": "Creating...",
+      "charactersCount": "characters",
+      "errors": {
+        "roomNameRequired": "Room name is required",
+        "roomNameTooShort": "Room name must be at least 3 characters",
+        "roomNameTooLong": "Room name must be less than 50 characters",
+        "playerNameRequired": "Player name is required",
+        "playerNameTooShort": "Player name must be at least 2 characters",
+        "playerNameTooLong": "Player name must be less than 20 characters",
+        "createFailed": "Failed to create room. Please try again."
+      },
+      "tips": {
+        "title": "Tips:",
+        "roomName": "Choose a descriptive name for your room (3-50 characters)",
+        "playerName": "Enter your player name (2-20 characters)",
+        "shareId": "Share the Room ID with your friend to play together"
+      }
+    },
+    "join": {
+      "title": "Join Existing Room",
+      "roomId": "Room ID",
+      "roomIdPlaceholder": "Enter 6-character room ID...",
+      "yourName": "Your Name",
+      "yourNamePlaceholder": "Enter your name...",
+      "joinButton": "Join Room",
+      "joining": "Joining...",
+      "charactersCount": "characters",
+      "errors": {
+        "roomIdRequired": "Room ID is required",
+        "roomIdInvalid": "Room ID must be 6 characters",
+        "playerNameRequired": "Player name is required",
+        "playerNameTooShort": "Player name must be at least 2 characters",
+        "playerNameTooLong": "Player name must be less than 20 characters",
+        "joinFailed": "Failed to join room. Please try again."
+      },
+      "howToJoin": {
+        "title": "How to join:",
+        "step1": "Get the 6-character Room ID from your friend",
+        "step2": "Enter your player name (2-20 characters)",
+        "step3": "Click \"Join Room\" to start playing"
+      }
+    },
+    "list": {
+      "title": "Game Rooms",
+      "refreshButton": "Refresh",
+      "loading": "Loading...",
+      "emptyState": "No rooms available. Create one to get started!",
+      "availableRooms": "Available Rooms",
+      "activeGames": "Active Games",
+      "finishedGames": "Finished Games",
+      "roomId": "Room ID",
+      "players": "Players",
+      "availableSlots": "Available Slots",
+      "currentTurn": "Current Turn",
+      "winner": "Winner",
+      "draw": "Draw",
+      "status": {
+        "waiting": "waiting",
+        "ready": "ready",
+        "playing": "playing",
+        "finished": "finished"
+      },
+      "errors": {
+        "loadFailed": "Failed to load rooms. Please try again."
+      }
+    },
+    "details": {
+      "roomInformation": "Room Information",
+      "roomId": "Room ID",
+      "status": "Status",
+      "created": "Created",
+      "players": "Players",
+      "playersSection": "Players",
+      "noPlayers": "No players yet",
+      "playerId": "ID",
+      "ready": "Ready",
+      "notReady": "Not Ready",
+      "gameState": "Game State",
+      "gameStatus": "Game Status",
+      "currentTurn": "Current Turn",
+      "winner": "Winner",
+      "draw": "Draw",
+      "joinButton": "Join Room",
+      "deleteButton": "Delete Room",
+      "closeButton": "Close",
+      "copyButton": "Copy Room ID",
+      "copied": "Copied!",
+      "confirmDelete": "Are you sure you want to delete room \"{roomName}\"?"
+    }
   }
 }

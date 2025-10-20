@@ -1,10 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RoomDetailsComponent } from './room-details.component';
 import { Room } from '../../services/room.service';
+import { TranslationService } from '../../services/translation.service';
 
 describe('RoomDetailsComponent', () => {
   let component: RoomDetailsComponent;
   let fixture: ComponentFixture<RoomDetailsComponent>;
+  let mockTranslationService: jasmine.SpyObj<TranslationService>;
 
   const mockRoom: Room = {
     id: 'ABC123',
@@ -24,8 +26,14 @@ describe('RoomDetailsComponent', () => {
   };
 
   beforeEach(async () => {
+    mockTranslationService = jasmine.createSpyObj('TranslationService', ['translate']);
+    mockTranslationService.translate.and.callFake((key: string) => key);
+
     await TestBed.configureTestingModule({
-      imports: [RoomDetailsComponent]
+      imports: [RoomDetailsComponent],
+      providers: [
+        { provide: TranslationService, useValue: mockTranslationService }
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(RoomDetailsComponent);
@@ -114,7 +122,7 @@ describe('RoomDetailsComponent', () => {
 
       component.onDeleteRoom();
 
-      expect(window.confirm).toHaveBeenCalledWith('Are you sure you want to delete room "Test Room"?');
+      expect(window.confirm).toHaveBeenCalledWith('room.details.confirmDelete');
       expect(component.deleteRoom.emit).toHaveBeenCalledWith('ABC123');
     });
 
@@ -245,7 +253,7 @@ describe('RoomDetailsComponent', () => {
         ...mockRoom,
         gameState: { ...mockRoom.gameState, winner: 'draw' }
       };
-      expect(component.getWinnerText()).toBe('Draw');
+      expect(component.getWinnerText()).toBe('room.details.draw');
     });
 
     it('should return player name and symbol for winner', () => {

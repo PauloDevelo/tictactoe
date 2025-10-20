@@ -2,6 +2,7 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { OnlineGameService } from '../../services/online-game.service';
+import { TranslationService } from '../../services/translation.service';
 
 export interface JoinRoomData {
   roomId: string;
@@ -23,7 +24,10 @@ export class JoinRoomComponent {
   joining = false;
   error: string | null = null;
 
-  constructor(private onlineGameService: OnlineGameService) {}
+  constructor(
+    private onlineGameService: OnlineGameService,
+    public readonly translationService: TranslationService
+  ) {}
 
   /**
    * Join a room
@@ -34,27 +38,27 @@ export class JoinRoomComponent {
     const trimmedPlayerName = this.playerName.trim();
 
     if (!trimmedRoomId) {
-      this.error = 'Room ID is required';
+      this.error = this.translationService.translate('room.join.errors.roomIdRequired');
       return;
     }
 
     if (trimmedRoomId.length !== 6) {
-      this.error = 'Room ID must be 6 characters';
+      this.error = this.translationService.translate('room.join.errors.roomIdInvalid');
       return;
     }
 
     if (!trimmedPlayerName) {
-      this.error = 'Player name is required';
+      this.error = this.translationService.translate('room.join.errors.playerNameRequired');
       return;
     }
 
     if (trimmedPlayerName.length < 2) {
-      this.error = 'Player name must be at least 2 characters';
+      this.error = this.translationService.translate('room.join.errors.playerNameTooShort');
       return;
     }
 
     if (trimmedPlayerName.length > 20) {
-      this.error = 'Player name must be less than 20 characters';
+      this.error = this.translationService.translate('room.join.errors.playerNameTooLong');
       return;
     }
 
@@ -81,7 +85,7 @@ export class JoinRoomComponent {
       this.playerName = '';
       this.joining = false;
     } catch (err) {
-      this.error = 'Failed to join room. Please try again.';
+      this.error = this.translationService.translate('room.join.errors.joinFailed');
       this.joining = false;
       console.error('Error joining room:', err);
     }

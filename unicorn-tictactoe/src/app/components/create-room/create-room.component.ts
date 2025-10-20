@@ -2,6 +2,7 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RoomService, Room } from '../../services/room.service';
+import { TranslationService } from '../../services/translation.service';
 
 export interface CreateRoomData {
   room: Room;
@@ -23,7 +24,10 @@ export class CreateRoomComponent {
   creating = false;
   error: string | null = null;
 
-  constructor(private roomService: RoomService) {}
+  constructor(
+    private roomService: RoomService,
+    public readonly translationService: TranslationService
+  ) {}
 
   /**
    * Create a new room
@@ -33,32 +37,32 @@ export class CreateRoomComponent {
     const trimmedPlayerName = this.playerName.trim();
 
     if (!trimmedName) {
-      this.error = 'Room name is required';
+      this.error = this.translationService.translate('room.create.errors.roomNameRequired');
       return;
     }
 
     if (trimmedName.length < 3) {
-      this.error = 'Room name must be at least 3 characters';
+      this.error = this.translationService.translate('room.create.errors.roomNameTooShort');
       return;
     }
 
     if (trimmedName.length > 50) {
-      this.error = 'Room name must be less than 50 characters';
+      this.error = this.translationService.translate('room.create.errors.roomNameTooLong');
       return;
     }
 
     if (!trimmedPlayerName) {
-      this.error = 'Player name is required';
+      this.error = this.translationService.translate('room.create.errors.playerNameRequired');
       return;
     }
 
     if (trimmedPlayerName.length < 2) {
-      this.error = 'Player name must be at least 2 characters';
+      this.error = this.translationService.translate('room.create.errors.playerNameTooShort');
       return;
     }
 
     if (trimmedPlayerName.length > 20) {
-      this.error = 'Player name must be less than 20 characters';
+      this.error = this.translationService.translate('room.create.errors.playerNameTooLong');
       return;
     }
 
@@ -73,7 +77,7 @@ export class CreateRoomComponent {
         this.creating = false;
       },
       error: (err) => {
-        this.error = 'Failed to create room. Please try again.';
+        this.error = this.translationService.translate('room.create.errors.createFailed');
         this.creating = false;
         console.error('Error creating room:', err);
       }

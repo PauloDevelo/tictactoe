@@ -3,11 +3,13 @@ import { FormsModule } from '@angular/forms';
 import { of, throwError } from 'rxjs';
 import { CreateRoomComponent } from './create-room.component';
 import { RoomService, Room } from '../../services/room.service';
+import { TranslationService } from '../../services/translation.service';
 
 describe('CreateRoomComponent', () => {
   let component: CreateRoomComponent;
   let fixture: ComponentFixture<CreateRoomComponent>;
   let mockRoomService: jasmine.SpyObj<RoomService>;
+  let mockTranslationService: jasmine.SpyObj<TranslationService>;
 
   const mockRoom: Room = {
     id: 'ABC123',
@@ -26,11 +28,14 @@ describe('CreateRoomComponent', () => {
 
   beforeEach(async () => {
     mockRoomService = jasmine.createSpyObj('RoomService', ['createRoom']);
+    mockTranslationService = jasmine.createSpyObj('TranslationService', ['translate']);
+    mockTranslationService.translate.and.callFake((key: string) => key);
 
     await TestBed.configureTestingModule({
       imports: [CreateRoomComponent, FormsModule],
       providers: [
-        { provide: RoomService, useValue: mockRoomService }
+        { provide: RoomService, useValue: mockRoomService },
+        { provide: TranslationService, useValue: mockTranslationService }
       ]
     }).compileComponents();
 
@@ -85,7 +90,7 @@ describe('CreateRoomComponent', () => {
       component.playerName = 'Alice';
       component.createRoom();
 
-      expect(component.error).toBe('Room name is required');
+      expect(component.error).toBe('room.create.errors.roomNameRequired');
       expect(mockRoomService.createRoom).not.toHaveBeenCalled();
     });
 
@@ -94,7 +99,7 @@ describe('CreateRoomComponent', () => {
       component.playerName = 'Alice';
       component.createRoom();
 
-      expect(component.error).toBe('Room name is required');
+      expect(component.error).toBe('room.create.errors.roomNameRequired');
       expect(mockRoomService.createRoom).not.toHaveBeenCalled();
     });
 
@@ -103,7 +108,7 @@ describe('CreateRoomComponent', () => {
       component.playerName = 'Alice';
       component.createRoom();
 
-      expect(component.error).toBe('Room name must be at least 3 characters');
+      expect(component.error).toBe('room.create.errors.roomNameTooShort');
       expect(mockRoomService.createRoom).not.toHaveBeenCalled();
     });
 
@@ -112,7 +117,7 @@ describe('CreateRoomComponent', () => {
       component.playerName = 'Alice';
       component.createRoom();
 
-      expect(component.error).toBe('Room name must be less than 50 characters');
+      expect(component.error).toBe('room.create.errors.roomNameTooLong');
       expect(mockRoomService.createRoom).not.toHaveBeenCalled();
     });
 
@@ -121,7 +126,7 @@ describe('CreateRoomComponent', () => {
       component.playerName = '';
       component.createRoom();
 
-      expect(component.error).toBe('Player name is required');
+      expect(component.error).toBe('room.create.errors.playerNameRequired');
       expect(mockRoomService.createRoom).not.toHaveBeenCalled();
     });
 
@@ -130,7 +135,7 @@ describe('CreateRoomComponent', () => {
       component.playerName = '   ';
       component.createRoom();
 
-      expect(component.error).toBe('Player name is required');
+      expect(component.error).toBe('room.create.errors.playerNameRequired');
       expect(mockRoomService.createRoom).not.toHaveBeenCalled();
     });
 
@@ -139,7 +144,7 @@ describe('CreateRoomComponent', () => {
       component.playerName = 'A';
       component.createRoom();
 
-      expect(component.error).toBe('Player name must be at least 2 characters');
+      expect(component.error).toBe('room.create.errors.playerNameTooShort');
       expect(mockRoomService.createRoom).not.toHaveBeenCalled();
     });
 
@@ -148,7 +153,7 @@ describe('CreateRoomComponent', () => {
       component.playerName = 'A'.repeat(21);
       component.createRoom();
 
-      expect(component.error).toBe('Player name must be less than 20 characters');
+      expect(component.error).toBe('room.create.errors.playerNameTooLong');
       expect(mockRoomService.createRoom).not.toHaveBeenCalled();
     });
 
@@ -160,7 +165,7 @@ describe('CreateRoomComponent', () => {
       component.createRoom();
 
       setTimeout(() => {
-        expect(component.error).toBe('Failed to create room. Please try again.');
+        expect(component.error).toBe('room.create.errors.createFailed');
         expect(component.creating).toBe(false);
         done();
       }, 100);

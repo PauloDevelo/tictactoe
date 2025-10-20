@@ -38,5 +38,103 @@
       "title": "Contre IA",
       "description": "Affrontez l'ordinateur"
     }
+  },
+  "room": {
+    "create": {
+      "title": "Créer une nouvelle salle",
+      "roomName": "Nom de la salle",
+      "roomNamePlaceholder": "Entrez le nom de la salle...",
+      "yourName": "Votre nom",
+      "yourNamePlaceholder": "Entrez votre nom...",
+      "createButton": "Créer la salle",
+      "creating": "Création...",
+      "charactersCount": "caractères",
+      "errors": {
+        "roomNameRequired": "Le nom de la salle est requis",
+        "roomNameTooShort": "Le nom de la salle doit contenir au moins 3 caractères",
+        "roomNameTooLong": "Le nom de la salle doit contenir moins de 50 caractères",
+        "playerNameRequired": "Le nom du joueur est requis",
+        "playerNameTooShort": "Le nom du joueur doit contenir au moins 2 caractères",
+        "playerNameTooLong": "Le nom du joueur doit contenir moins de 20 caractères",
+        "createFailed": "Échec de la création de la salle. Veuillez réessayer."
+      },
+      "tips": {
+        "title": "Conseils :",
+        "roomName": "Choisissez un nom descriptif pour votre salle (3-50 caractères)",
+        "playerName": "Entrez votre nom de joueur (2-20 caractères)",
+        "shareId": "Partagez l'ID de la salle avec votre ami pour jouer ensemble"
+      }
+    },
+    "join": {
+      "title": "Rejoindre une salle existante",
+      "roomId": "ID de la salle",
+      "roomIdPlaceholder": "Entrez l'ID de la salle (6 caractères)...",
+      "yourName": "Votre nom",
+      "yourNamePlaceholder": "Entrez votre nom...",
+      "joinButton": "Rejoindre la salle",
+      "joining": "Connexion...",
+      "charactersCount": "caractères",
+      "errors": {
+        "roomIdRequired": "L'ID de la salle est requis",
+        "roomIdInvalid": "L'ID de la salle doit contenir 6 caractères",
+        "playerNameRequired": "Le nom du joueur est requis",
+        "playerNameTooShort": "Le nom du joueur doit contenir au moins 2 caractères",
+        "playerNameTooLong": "Le nom du joueur doit contenir moins de 20 caractères",
+        "joinFailed": "Échec de la connexion à la salle. Veuillez réessayer."
+      },
+      "howToJoin": {
+        "title": "Comment rejoindre :",
+        "step1": "Obtenez l'ID de la salle (6 caractères) de votre ami",
+        "step2": "Entrez votre nom de joueur (2-20 caractères)",
+        "step3": "Cliquez sur \"Rejoindre la salle\" pour commencer à jouer"
+      }
+    },
+    "list": {
+      "title": "Salles de jeu",
+      "refreshButton": "Actualiser",
+      "loading": "Chargement...",
+      "emptyState": "Aucune salle disponible. Créez-en une pour commencer !",
+      "availableRooms": "Salles disponibles",
+      "activeGames": "Parties en cours",
+      "finishedGames": "Parties terminées",
+      "roomId": "ID de la salle",
+      "players": "Joueurs",
+      "availableSlots": "Places disponibles",
+      "currentTurn": "Tour actuel",
+      "winner": "Gagnant",
+      "draw": "Match nul",
+      "status": {
+        "waiting": "en attente",
+        "ready": "prêt",
+        "playing": "en cours",
+        "finished": "terminé"
+      },
+      "errors": {
+        "loadFailed": "Échec du chargement des salles. Veuillez réessayer."
+      }
+    },
+    "details": {
+      "roomInformation": "Informations sur la salle",
+      "roomId": "ID de la salle",
+      "status": "Statut",
+      "created": "Créée le",
+      "players": "Joueurs",
+      "playersSection": "Joueurs",
+      "noPlayers": "Aucun joueur pour le moment",
+      "playerId": "ID",
+      "ready": "Prêt",
+      "notReady": "Pas prêt",
+      "gameState": "État du jeu",
+      "gameStatus": "Statut du jeu",
+      "currentTurn": "Tour actuel",
+      "winner": "Gagnant",
+      "draw": "Match nul",
+      "joinButton": "Rejoindre la salle",
+      "deleteButton": "Supprimer la salle",
+      "closeButton": "Fermer",
+      "copyButton": "Copier l'ID de la salle",
+      "copied": "Copié !",
+      "confirmDelete": "Êtes-vous sûr de vouloir supprimer la salle \"{roomName}\" ?"
+    }
   }
 }

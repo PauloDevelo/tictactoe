@@ -2,11 +2,13 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { JoinRoomComponent } from './join-room.component';
 import { OnlineGameService } from '../../services/online-game.service';
+import { TranslationService } from '../../services/translation.service';
 
 describe('JoinRoomComponent', () => {
   let component: JoinRoomComponent;
   let fixture: ComponentFixture<JoinRoomComponent>;
   let mockOnlineGameService: jasmine.SpyObj<OnlineGameService>;
+  let mockTranslationService: jasmine.SpyObj<TranslationService>;
 
   beforeEach(async () => {
     mockOnlineGameService = jasmine.createSpyObj('OnlineGameService', [
@@ -14,11 +16,14 @@ describe('JoinRoomComponent', () => {
       'joinRoom',
       'isConnected'
     ]);
+    mockTranslationService = jasmine.createSpyObj('TranslationService', ['translate']);
+    mockTranslationService.translate.and.callFake((key: string) => key);
 
     await TestBed.configureTestingModule({
       imports: [JoinRoomComponent, FormsModule],
       providers: [
-        { provide: OnlineGameService, useValue: mockOnlineGameService }
+        { provide: OnlineGameService, useValue: mockOnlineGameService },
+        { provide: TranslationService, useValue: mockTranslationService }
       ]
     }).compileComponents();
 
@@ -99,7 +104,7 @@ describe('JoinRoomComponent', () => {
 
       component.joinRoom();
 
-      expect(component.error).toBe('Room ID is required');
+      expect(component.error).toBe('room.join.errors.roomIdRequired');
       expect(mockOnlineGameService.joinRoom).not.toHaveBeenCalled();
     });
 
@@ -109,7 +114,7 @@ describe('JoinRoomComponent', () => {
 
       component.joinRoom();
 
-      expect(component.error).toBe('Room ID is required');
+      expect(component.error).toBe('room.join.errors.roomIdRequired');
       expect(mockOnlineGameService.joinRoom).not.toHaveBeenCalled();
     });
 
@@ -119,7 +124,7 @@ describe('JoinRoomComponent', () => {
 
       component.joinRoom();
 
-      expect(component.error).toBe('Room ID must be 6 characters');
+      expect(component.error).toBe('room.join.errors.roomIdInvalid');
       expect(mockOnlineGameService.joinRoom).not.toHaveBeenCalled();
     });
 
@@ -129,7 +134,7 @@ describe('JoinRoomComponent', () => {
 
       component.joinRoom();
 
-      expect(component.error).toBe('Player name is required');
+      expect(component.error).toBe('room.join.errors.playerNameRequired');
       expect(mockOnlineGameService.joinRoom).not.toHaveBeenCalled();
     });
 
@@ -139,7 +144,7 @@ describe('JoinRoomComponent', () => {
 
       component.joinRoom();
 
-      expect(component.error).toBe('Player name is required');
+      expect(component.error).toBe('room.join.errors.playerNameRequired');
       expect(mockOnlineGameService.joinRoom).not.toHaveBeenCalled();
     });
 
@@ -149,7 +154,7 @@ describe('JoinRoomComponent', () => {
 
       component.joinRoom();
 
-      expect(component.error).toBe('Player name must be at least 2 characters');
+      expect(component.error).toBe('room.join.errors.playerNameTooShort');
       expect(mockOnlineGameService.joinRoom).not.toHaveBeenCalled();
     });
 
@@ -159,7 +164,7 @@ describe('JoinRoomComponent', () => {
 
       component.joinRoom();
 
-      expect(component.error).toBe('Player name must be less than 20 characters');
+      expect(component.error).toBe('room.join.errors.playerNameTooLong');
       expect(mockOnlineGameService.joinRoom).not.toHaveBeenCalled();
     });
 
@@ -170,7 +175,7 @@ describe('JoinRoomComponent', () => {
 
       component.joinRoom();
 
-      expect(component.error).toBe('Failed to join room. Please try again.');
+      expect(component.error).toBe('room.join.errors.joinFailed');
       expect(component.joining).toBe(false);
     });
   });
