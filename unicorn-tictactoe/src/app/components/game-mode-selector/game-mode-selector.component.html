@@ -1,5 +1,5 @@
 <div class="game-mode-selector">
-  <h2 class="selector-title">Choose Game Mode</h2>
+  <h2 class="selector-title">{{ translationService.translate('gameMode.title') }}</h2>
   
   <div class="mode-cards">
     <div 
@@ -9,8 +9,8 @@
       [attr.data-mode]="gameMode.mode"
     >
       <div class="mode-icon">{{ gameMode.icon }}</div>
-      <h3 class="mode-title">{{ gameMode.title }}</h3>
-      <p class="mode-description">{{ gameMode.description }}</p>
+      <h3 class="mode-title">{{ translationService.translate(gameMode.titleKey) }}</h3>
+      <p class="mode-description">{{ translationService.translate(gameMode.descriptionKey) }}</p>
     </div>
   </div>
 </div>

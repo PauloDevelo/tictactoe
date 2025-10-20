@@ -3,15 +3,37 @@ import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { GameModeSelectorComponent } from './game-mode-selector.component';
 import { GameMode } from '../../models/game-mode.model';
+import { TranslationService } from '../../services/translation.service';
 
 describe('GameModeSelectorComponent', () => {
   let component: GameModeSelectorComponent;
   let fixture: ComponentFixture<GameModeSelectorComponent>;
   let compiled: HTMLElement;
+  let mockTranslationService: jasmine.SpyObj<TranslationService>;
 
   beforeEach(async () => {
+    // Create mock translation service
+    mockTranslationService = jasmine.createSpyObj('TranslationService', ['translate']);
+    
+    // Setup mock translations
+    mockTranslationService.translate.and.callFake((key: string) => {
+      const translations: Record<string, string> = {
+        'gameMode.title': 'Choose Game Mode',
+        'gameMode.local.title': 'Local Game',
+        'gameMode.local.description': 'Play against a friend on the same device',
+        'gameMode.ai.title': 'vs AI',
+        'gameMode.ai.description': 'Challenge the computer opponent',
+        'gameMode.online.title': 'Online Game',
+        'gameMode.online.description': 'Play with friends over the internet'
+      };
+      return translations[key] || key;
+    });
+
     await TestBed.configureTestingModule({
-      imports: [GameModeSelectorComponent]
+      imports: [GameModeSelectorComponent],
+      providers: [
+        { provide: TranslationService, useValue: mockTranslationService }
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(GameModeSelectorComponent);
@@ -123,8 +145,8 @@ describe('GameModeSelectorComponent', () => {
     it('should have correct structure for each game mode', () => {
       component.gameModes.forEach(gameMode => {
         expect(gameMode.mode).toBeDefined();
-        expect(gameMode.title).toBeDefined();
-        expect(gameMode.description).toBeDefined();
+        expect(gameMode.titleKey).toBeDefined();
+        expect(gameMode.descriptionKey).toBeDefined();
         expect(gameMode.icon).toBeDefined();
       });
     });
@@ -132,21 +154,21 @@ describe('GameModeSelectorComponent', () => {
     it('should have local mode configuration', () => {
       const localMode = component.gameModes.find(m => m.mode === 'local');
       expect(localMode).toBeDefined();
-      expect(localMode?.title).toBe('Local Game');
+      expect(localMode?.titleKey).toBe('gameMode.local.title');
       expect(localMode?.icon).toBe('👥');
     });
 
     it('should have AI mode configuration', () => {
       const aiMode = component.gameModes.find(m => m.mode === 'ai');
       expect(aiMode).toBeDefined();
-      expect(aiMode?.title).toBe('vs AI');
+      expect(aiMode?.titleKey).toBe('gameMode.ai.title');
       expect(aiMode?.icon).toBe('🤖');
     });
 
     it('should have online mode configuration', () => {
       const onlineMode = component.gameModes.find(m => m.mode === 'online');
       expect(onlineMode).toBeDefined();
-      expect(onlineMode?.title).toBe('Online Game');
+      expect(onlineMode?.titleKey).toBe('gameMode.online.title');
       expect(onlineMode?.icon).toBe('🌐');
     });
   });

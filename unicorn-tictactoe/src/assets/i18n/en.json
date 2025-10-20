@@ -23,5 +23,20 @@
       "yes": "Yes",
       "no": "No"
     }
+  },
+  "gameMode": {
+    "title": "Choose Game Mode",
+    "local": {
+      "title": "Local Game",
+      "description": "Play against a friend on the same device"
+    },
+    "online": {
+      "title": "Online Game",
+      "description": "Play with friends over the internet"
+    },
+    "ai": {
+      "title": "vs AI",
+      "description": "Challenge the computer opponent"
+    }
   }
 }

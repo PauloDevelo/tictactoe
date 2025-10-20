@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GameMode } from '../../models/game-mode.model';
+import { TranslationService } from '../../services/translation.service';
 
 @Component({
   selector: 'app-game-mode-selector',
@@ -12,28 +13,30 @@ import { GameMode } from '../../models/game-mode.model';
 export class GameModeSelectorComponent {
   @Output() modeSelected = new EventEmitter<GameMode>();
 
+  readonly translationService = inject(TranslationService);
+
   readonly gameModes: Array<{
     mode: GameMode;
-    title: string;
-    description: string;
+    titleKey: string;
+    descriptionKey: string;
     icon: string;
   }> = [
     {
       mode: 'local',
-      title: 'Local Game',
-      description: 'Play against a friend on the same device',
+      titleKey: 'gameMode.local.title',
+      descriptionKey: 'gameMode.local.description',
       icon: '👥'
     },
     {
       mode: 'ai',
-      title: 'vs AI',
-      description: 'Challenge the computer opponent',
+      titleKey: 'gameMode.ai.title',
+      descriptionKey: 'gameMode.ai.description',
       icon: '🤖'
     },
     {
       mode: 'online',
-      title: 'Online Game',
-      description: 'Play with friends over the internet',
+      titleKey: 'gameMode.online.title',
+      descriptionKey: 'gameMode.online.description',
       icon: '🌐'
     }
   ];

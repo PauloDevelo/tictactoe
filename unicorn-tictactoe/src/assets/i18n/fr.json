@@ -23,5 +23,20 @@
       "yes": "Oui",
       "no": "Non"
     }
+  },
+  "gameMode": {
+    "title": "Choisissez votre mode de jeu",
+    "local": {
+      "title": "Jeu Local",
+      "description": "Jouez contre un ami sur le même appareil"
+    },
+    "online": {
+      "title": "Jeu en Ligne",
+      "description": "Créez ou rejoignez une salle pour jouer en ligne"
+    },
+    "ai": {
+      "title": "Contre IA",
+      "description": "Affrontez l'ordinateur"
+    }
   }
 }
