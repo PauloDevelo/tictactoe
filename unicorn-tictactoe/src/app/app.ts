@@ -12,6 +12,7 @@ import { JoinRoomComponent } from './components/join-room/join-room.component';
 import { GameMode } from './models/game-mode.model';
 import { OnlineGameService } from './services/online-game.service';
 import { GameService } from './services/game.service';
+import { TranslationService } from './services/translation.service';
 import { Room } from './services/room.service';
 
 @Component({
@@ -45,7 +46,8 @@ export class App implements OnInit, OnDestroy {
 
   constructor(
     private onlineGameService: OnlineGameService,
-    private gameService: GameService
+    private gameService: GameService,
+    private translationService: TranslationService
   ) {}
 
   ngOnInit(): void {
