@@ -1,0 +1,96 @@
+<div 
+  *ngIf="isVisible && room" 
+  class="modal-overlay" 
+  (click)="onBackdropClick($event)"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="modal-title"
+>
+  <div class="modal-container">
+    <div class="modal-header">
+      <h2 id="modal-title">🎮 Join Room</h2>
+      <button 
+        type="button"
+        class="close-button" 
+        (click)="onClose()"
+        [disabled]="isJoining"
+        aria-label="Close modal"
+      >
+        ✕
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <!-- Room Details -->
+      <div class="room-details">
+        <div class="detail-row">
+          <span class="detail-label">Room Name:</span>
+          <span class="detail-value">{{ room.name }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Room ID:</span>
+          <span class="detail-value room-id">{{ room.id }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Players:</span>
+          <span class="detail-value">{{ room.players.length }} / {{ room.maxPlayers }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Status:</span>
+          <span class="detail-value" [class.status-waiting]="room.status === 'WAITING'" 
+                                      [class.status-ready]="room.status === 'READY'"
+                                      [class.status-in-progress]="room.status === 'IN_PROGRESS'"
+                                      [class.status-finished]="room.status === 'FINISHED'">
+            {{ getRoomStatusText() }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Room Full Warning -->
+      <div *ngIf="isRoomFull()" class="warning-message">
+        ⚠️ This room is full. You cannot join at this time.
+      </div>
+
+      <!-- Player Name Input -->
+      <div class="form-group" *ngIf="!isRoomFull()">
+        <label for="playerName">Your Name</label>
+        <input
+          type="text"
+          id="playerName"
+          name="playerName"
+          [(ngModel)]="playerName"
+          placeholder="Enter your name..."
+          [disabled]="isJoining"
+          class="player-name-input"
+          maxlength="20"
+          autofocus
+          aria-required="true"
+          aria-describedby="player-name-hint"
+        />
+        <div id="player-name-hint" class="input-hint">
+          {{ playerName.length }}/20 characters (minimum 2)
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="cancel-button"
+        (click)="onClose()"
+        [disabled]="isJoining"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="join-button"
+        (click)="onJoin()"
+        [disabled]="!canJoin()"
+        *ngIf="!isRoomFull()"
+      >
+        {{ isJoining ? '⏳ Joining...' : '🚀 Join Room' }}
+      </button>
+    </div>
+  </div>
+</div>
