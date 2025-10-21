@@ -59,8 +59,8 @@
       "optional": "Optionnel",
       "yes": "Oui",
       "no": "Non"
-    }
-  },
+    },
+
   "gameMode": {
     "title": "Choisissez votre mode de jeu",
     "local": {

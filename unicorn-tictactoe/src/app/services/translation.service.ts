@@ -27,15 +27,6 @@ export class TranslationService {
   public currentLanguage$: Observable<Language> = this.currentLanguageSubject.asObservable();
   
   constructor() {
-    this.initializeLanguage();
-  }
-  
-  /**
-   * Initialize the service by detecting and loading the browser language
-   */
-  private initializeLanguage(): void {
-    const detectedLanguage = this.detectBrowserLanguage();
-    this.setLanguage(detectedLanguage.normalized);
   }
   
   /**
@@ -116,6 +107,19 @@ export class TranslationService {
       catchError(error => {
         console.error(`Error loading translations from ${translationPath}:`, error);
         throw error;
+      })
+    );
+  }
+  
+  /**
+   * Load translations synchronously (for app initialization)
+   * @param language The language to load
+   * @returns Observable of the loaded translations
+   */
+  public loadTranslationsSync(language: Language): Observable<TranslationStructure> {
+    return this.loadTranslations(language).pipe(
+      tap(() => {
+        this.currentLanguageSubject.next(language);
       })
     );
   }
