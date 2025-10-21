@@ -17,7 +17,7 @@ export const createInitialGameState = (): GameState => ({
   status: 'waiting',
   winner: null,
   winningLine: null,
-  lastStartingPlayer: 'O', // Set to 'O' so first game starts with 'X'
+  lastStartingPlayer: 'X',
 });
 
 export const makeMove = (
@@ -48,7 +48,6 @@ export const makeMove = (
 export const startGame = (state: GameState): GameState => ({
   ...state,
   status: 'playing',
-  lastStartingPlayer: state.currentTurn, // Track who starts this game for alternating
 });
 
 export const resetGame = (previousState?: GameState): GameState => {
