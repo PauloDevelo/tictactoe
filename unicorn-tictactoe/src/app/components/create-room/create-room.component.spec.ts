@@ -16,6 +16,7 @@ describe('CreateRoomComponent', () => {
     name: 'Test Room',
     status: 'waiting',
     players: [],
+    maxPlayers: 2,
     gameState: {
       board: [null, null, null, null, null, null, null, null, null],
       currentTurn: 'X',

@@ -1,14 +1,16 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { of, throwError } from 'rxjs';
+import { of, throwError, Subject } from 'rxjs';
 import { RoomListComponent } from './room-list.component';
 import { RoomService, Room } from '../../services/room.service';
 import { TranslationService } from '../../services/translation.service';
+import { WebSocketService } from '../../services/websocket.service';
 
 describe('RoomListComponent', () => {
   let component: RoomListComponent;
   let fixture: ComponentFixture<RoomListComponent>;
   let mockRoomService: jasmine.SpyObj<RoomService>;
   let mockTranslationService: jasmine.SpyObj<TranslationService>;
+  let mockWebSocketService: jasmine.SpyObj<WebSocketService>;
 
   const mockRooms: Room[] = [
     {
@@ -16,6 +18,7 @@ describe('RoomListComponent', () => {
       name: 'Waiting Room',
       status: 'waiting',
       players: [],
+      maxPlayers: 2,
       gameState: {
         board: [null, null, null, null, null, null, null, null, null],
         currentTurn: 'X',
@@ -33,6 +36,7 @@ describe('RoomListComponent', () => {
         { id: 'p1', name: 'Player 1', symbol: 'X', isReady: true },
         { id: 'p2', name: 'Player 2', symbol: 'O', isReady: true }
       ],
+      maxPlayers: 2,
       gameState: {
         board: ['X', 'O', null, null, null, null, null, null, null],
         currentTurn: 'X',
@@ -50,6 +54,7 @@ describe('RoomListComponent', () => {
         { id: 'p1', name: 'Player 1', symbol: 'X', isReady: true },
         { id: 'p2', name: 'Player 2', symbol: 'O', isReady: true }
       ],
+      maxPlayers: 2,
       gameState: {
         board: ['X', 'X', 'X', 'O', 'O', null, null, null, null],
         currentTurn: 'X',
@@ -70,12 +75,23 @@ describe('RoomListComponent', () => {
     ]);
     mockTranslationService = jasmine.createSpyObj('TranslationService', ['translate']);
     mockTranslationService.translate.and.callFake((key: string) => key);
+    
+    mockWebSocketService = jasmine.createSpyObj('WebSocketService', [
+      'connect',
+      'joinRoom',
+      'isConnected',
+      'onRoomJoined',
+      'onError'
+    ]);
+    mockWebSocketService.onRoomJoined.and.returnValue(new Subject());
+    mockWebSocketService.onError.and.returnValue(new Subject());
 
     await TestBed.configureTestingModule({
       imports: [RoomListComponent],
       providers: [
         { provide: RoomService, useValue: mockRoomService },
-        { provide: TranslationService, useValue: mockTranslationService }
+        { provide: TranslationService, useValue: mockTranslationService },
+        { provide: WebSocketService, useValue: mockWebSocketService }
       ]
     }).compileComponents();
 

@@ -15,6 +15,7 @@ describe('RoomDetailsComponent', () => {
     players: [
       { id: 'p1', name: 'Player 1', symbol: 'X', isReady: true }
     ],
+    maxPlayers: 2,
     gameState: {
       board: [null, null, null, null, null, null, null, null, null],
       currentTurn: 'X',

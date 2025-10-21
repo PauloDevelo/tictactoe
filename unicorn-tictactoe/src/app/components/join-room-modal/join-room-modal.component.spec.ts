@@ -1,10 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { JoinRoomModalComponent } from './join-room-modal.component';
-import { Room } from '../../models/room.interface';
-import { RoomStatus } from '../../models/room-status.enum';
-import { GameStatus } from '../../models/game-status.enum';
-import { Player } from '../../models/player.model';
+import { Room } from '../../services/room.service';
 
 describe('JoinRoomModalComponent', () => {
   let component: JoinRoomModalComponent;
@@ -17,23 +14,20 @@ describe('JoinRoomModalComponent', () => {
       {
         id: 'player1',
         name: 'Alice',
-        symbol: Player.UNICORN,
+        symbol: 'X',
         isReady: true
       }
     ],
     maxPlayers: 2,
     gameState: {
       board: [null, null, null, null, null, null, null, null, null],
-      currentPlayer: Player.UNICORN,
-      status: GameStatus.IN_PROGRESS,
-      scores: {
-        unicorn: 0,
-        cat: 0
-      },
+      currentTurn: 'X',
+      status: 'playing',
+      winner: null,
       winningLine: null
     },
-    status: RoomStatus.WAITING,
-    createdAt: new Date('2024-01-15T10:30:00.000Z')
+    status: 'waiting',
+    createdAt: '2024-01-15T10:30:00.000Z'
   };
 
   beforeEach(async () => {
@@ -74,8 +68,8 @@ describe('JoinRoomModalComponent', () => {
       const fullRoom: Room = {
         ...mockRoom,
         players: [
-          { id: 'player1', name: 'Alice', symbol: Player.UNICORN, isReady: true },
-          { id: 'player2', name: 'Bob', symbol: Player.CAT, isReady: true }
+          { id: 'player1', name: 'Alice', symbol: 'X', isReady: true },
+          { id: 'player2', name: 'Bob', symbol: 'O', isReady: true }
         ]
       };
       component.room = fullRoom;
@@ -114,8 +108,8 @@ describe('JoinRoomModalComponent', () => {
       const fullRoom: Room = {
         ...mockRoom,
         players: [
-          { id: 'player1', name: 'Alice', symbol: Player.UNICORN, isReady: true },
-          { id: 'player2', name: 'Bob', symbol: Player.CAT, isReady: true }
+          { id: 'player1', name: 'Alice', symbol: 'X', isReady: true },
+          { id: 'player2', name: 'Bob', symbol: 'O', isReady: true }
         ]
       };
       component.room = fullRoom;
@@ -245,22 +239,22 @@ describe('JoinRoomModalComponent', () => {
     });
 
     it('should return correct text for WAITING status', () => {
-      component.room = { ...mockRoom, status: RoomStatus.WAITING };
+      component.room = { ...mockRoom, status: 'waiting' };
       expect(component.getRoomStatusText()).toBe('Waiting for players');
     });
 
     it('should return correct text for READY status', () => {
-      component.room = { ...mockRoom, status: RoomStatus.READY };
+      component.room = { ...mockRoom, status: 'ready' };
       expect(component.getRoomStatusText()).toBe('Ready to start');
     });
 
     it('should return correct text for IN_PROGRESS status', () => {
-      component.room = { ...mockRoom, status: RoomStatus.IN_PROGRESS };
+      component.room = { ...mockRoom, status: 'playing' };
       expect(component.getRoomStatusText()).toBe('Game in progress');
     });
 
     it('should return correct text for FINISHED status', () => {
-      component.room = { ...mockRoom, status: RoomStatus.FINISHED };
+      component.room = { ...mockRoom, status: 'finished' };
       expect(component.getRoomStatusText()).toBe('Game finished');
     });
   });

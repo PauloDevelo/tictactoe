@@ -4,11 +4,13 @@ import { Subject, interval } from 'rxjs';
 import { takeUntil, switchMap, startWith } from 'rxjs/operators';
 import { RoomService, Room } from '../../services/room.service';
 import { TranslationService } from '../../services/translation.service';
+import { WebSocketService } from '../../services/websocket.service';
+import { JoinRoomModalComponent, JoinRoomModalData } from '../join-room-modal/join-room-modal.component';
 
 @Component({
   selector: 'app-room-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, JoinRoomModalComponent],
   templateUrl: './room-list.component.html',
   styleUrls: ['./room-list.component.css']
 })
@@ -18,10 +20,16 @@ export class RoomListComponent implements OnInit, OnDestroy {
   error: string | null = null;
   private destroy$ = new Subject<void>();
 
+  // Modal state
+  selectedRoom: Room | null = null;
+  isModalVisible = false;
+  joinError: string | null = null;
+
   @Output() roomClicked = new EventEmitter<Room>();
 
   constructor(
     private roomService: RoomService,
+    private webSocketService: WebSocketService,
     public readonly translationService: TranslationService
   ) {}
 
@@ -146,11 +154,71 @@ export class RoomListComponent implements OnInit, OnDestroy {
 
   /**
    * Handle room click event
-   * Only emits event if room is not full
+   * Opens modal for joining the room if not full
    */
   onRoomClick(room: Room): void {
     if (!this.isRoomFull(room)) {
+      this.selectedRoom = room;
+      this.isModalVisible = true;
+      this.joinError = null;
       this.roomClicked.emit(room);
+    }
+  }
+
+  /**
+   * Handle modal close event
+   * Resets modal state
+   */
+  onModalClose(): void {
+    this.isModalVisible = false;
+    this.selectedRoom = null;
+    this.joinError = null;
+  }
+
+  /**
+   * Handle join room request from modal
+   * Connects to WebSocket and joins the room
+   */
+  onJoinRequested(data: JoinRoomModalData): void {
+    if (!data.roomId || !data.playerName) {
+      this.joinError = this.translationService.translate('room.join.errors.invalidData');
+      return;
+    }
+
+    try {
+      // Ensure WebSocket is connected
+      if (!this.webSocketService.isConnected()) {
+        this.webSocketService.connect();
+      }
+
+      // Subscribe to room joined event for success handling
+      this.webSocketService.onRoomJoined()
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (event) => {
+            console.log('Successfully joined room:', event);
+            // Close modal on successful join
+            this.onModalClose();
+          }
+        });
+
+      // Subscribe to error events for error handling
+      this.webSocketService.onError()
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (error) => {
+            console.error('Error joining room:', error);
+            this.joinError = error.message || this.translationService.translate('room.join.errors.joinFailed');
+          }
+        });
+
+      // Join the room via WebSocket
+      this.webSocketService.joinRoom(data.roomId, data.playerName);
+    } catch (error) {
+      console.error('Error during join process:', error);
+      this.joinError = error instanceof Error 
+        ? error.message 
+        : this.translationService.translate('room.join.errors.joinFailed');
     }
   }
 }
