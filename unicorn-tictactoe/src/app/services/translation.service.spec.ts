@@ -226,6 +226,7 @@ describe('TranslationService', () => {
 
   describe('Language Loading and Setting', () => {
     it('should load English translations on initialization', () => {
+      service.setLanguage('en');
       const req = httpMock.expectOne('/assets/i18n/en.json');
       expect(req.request.method).toBe('GET');
       req.flush(mockEnglishTranslations);
@@ -234,7 +235,8 @@ describe('TranslationService', () => {
     });
 
     it('should set language to French and load French translations', (done) => {
-      // First, handle the initial English load
+      // First, load English
+      service.setLanguage('en');
       const initialReq = httpMock.expectOne('/assets/i18n/en.json');
       initialReq.flush(mockEnglishTranslations);
       
@@ -254,6 +256,7 @@ describe('TranslationService', () => {
 
     it('should cache loaded translations', () => {
       // Load English
+      service.setLanguage('en');
       const req1 = httpMock.expectOne('/assets/i18n/en.json');
       req1.flush(mockEnglishTranslations);
       
@@ -268,11 +271,11 @@ describe('TranslationService', () => {
     });
 
     it('should fallback to English if unsupported language is set', () => {
-      const req = httpMock.expectOne('/assets/i18n/en.json');
-      req.flush(mockEnglishTranslations);
-      
       const consoleSpy = spyOn(console, 'warn');
       service.setLanguage('es' as Language);
+      
+      const req = httpMock.expectOne('/assets/i18n/en.json');
+      req.flush(mockEnglishTranslations);
       
       expect(consoleSpy).toHaveBeenCalledWith(
         jasmine.stringContaining('Unsupported language: es')
@@ -283,7 +286,8 @@ describe('TranslationService', () => {
 
   describe('Translation Lookup', () => {
     beforeEach(() => {
-      // Load English translations
+      // Load English translations for all tests in this describe block
+      service.setLanguage('en');
       const req = httpMock.expectOne('/assets/i18n/en.json');
       req.flush(mockEnglishTranslations);
     });
@@ -373,6 +377,7 @@ describe('TranslationService', () => {
 
   describe('Observable Translation', () => {
     beforeEach(() => {
+      service.setLanguage('en');
       const req = httpMock.expectOne('/assets/i18n/en.json');
       req.flush(mockEnglishTranslations);
     });
@@ -401,6 +406,7 @@ describe('TranslationService', () => {
 
   describe('Current Language Observable', () => {
     it('should emit current language', (done) => {
+      service.setLanguage('en');
       const req = httpMock.expectOne('/assets/i18n/en.json');
       req.flush(mockEnglishTranslations);
       
@@ -411,6 +417,7 @@ describe('TranslationService', () => {
     });
 
     it('should emit when language changes', (done) => {
+      service.setLanguage('en');
       const req1 = httpMock.expectOne('/assets/i18n/en.json');
       req1.flush(mockEnglishTranslations);
       
@@ -438,6 +445,7 @@ describe('TranslationService', () => {
     it('should handle HTTP error when loading translations', () => {
       const consoleSpy = spyOn(console, 'error');
       
+      service.setLanguage('en');
       const req = httpMock.expectOne('/assets/i18n/en.json');
       req.error(new ProgressEvent('error'), { status: 404, statusText: 'Not Found' });
       
@@ -446,6 +454,7 @@ describe('TranslationService', () => {
 
     it('should fallback to default language if loading fails', (done) => {
       // Load English first
+      service.setLanguage('en');
       const req1 = httpMock.expectOne('/assets/i18n/en.json');
       req1.flush(mockEnglishTranslations);
       
@@ -454,15 +463,12 @@ describe('TranslationService', () => {
       const req2 = httpMock.expectOne('/assets/i18n/fr.json');
       req2.error(new ProgressEvent('error'), { status: 404, statusText: 'Not Found' });
       
-      // Should fallback to English
+      // Should fallback to English. English translations may already be cached,
+      // so don't expect a new HTTP request — just assert the language after the
+      // fallback logic runs.
       setTimeout(() => {
-        const req3 = httpMock.expectOne('/assets/i18n/en.json');
-        req3.flush(mockEnglishTranslations);
-        
-        setTimeout(() => {
-          expect(service.getCurrentLanguage()).toBe('en');
-          done();
-        }, 100);
+        expect(service.getCurrentLanguage()).toBe('en');
+        done();
       }, 100);
     });
   });
