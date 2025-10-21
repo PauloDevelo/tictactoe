@@ -1,20 +1,20 @@
 <div class="app-container">
   <header class="app-header">
-    <h1 class="app-title">🦄 Unicorn Tic-Tac-Toe 🐱</h1>
-    <p class="app-subtitle">A magical game for two players!</p>
+    <h1 class="app-title">🦄 {{ translationService.translate('app.title') }} 🐱</h1>
+    <p class="app-subtitle">{{ translationService.translate('app.subtitle') }}</p>
     
     <!-- Back to menu button -->
     <button 
       *ngIf="!showModeSelector" 
       class="back-button"
       (click)="returnToModeSelector()"
-      aria-label="Return to mode selector"
+      [attr.aria-label]="translationService.translate('app.aria.returnToModeSelector')"
     >
-      ← Back to Menu
+      ← {{ translationService.translate('app.backToMenu') }}
     </button>
   </header>
 
-  <main class="app-main" role="main" aria-label="Game area">
+  <main class="app-main" role="main" [attr.aria-label]="translationService.translate('app.aria.gameArea')">
     <!-- Connection error notification -->
     <div *ngIf="connectionError" class="error-notification" role="alert">
       <span class="error-icon">⚠️</span>
@@ -25,7 +25,7 @@
     <div *ngIf="isOnlineMode && !currentRoomId" class="connection-status">
       <span class="status-indicator" [class.connected]="isConnected"></span>
       <span class="status-text">
-        {{ isConnected ? 'Connected to server' : 'Connecting to server...' }}
+        {{ isConnected ? translationService.translate('app.connection.connected') : translationService.translate('app.connection.connecting') }}
       </span>
     </div>
 
@@ -37,24 +37,24 @@
 
     <!-- Online Mode: Room Selection -->
     <div *ngIf="isOnlineMode && !currentRoomId && !showModeSelector" class="online-lobby">
-      <h2 class="lobby-title">Online Multiplayer Lobby</h2>
+      <h2 class="lobby-title">{{ translationService.translate('app.lobby.title') }}</h2>
       
       <div class="lobby-content">
         <!-- Create Room Section -->
         <section class="lobby-section">
-          <h3 class="section-title">Create a New Room</h3>
+          <h3 class="section-title">{{ translationService.translate('app.lobby.createRoom') }}</h3>
           <app-create-room (roomCreated)="onRoomCreated($event)"></app-create-room>
         </section>
 
         <!-- Join Room Section -->
         <section class="lobby-section">
-          <h3 class="section-title">Join a Room by ID</h3>
+          <h3 class="section-title">{{ translationService.translate('app.lobby.joinRoom') }}</h3>
           <app-join-room (roomJoined)="onRoomJoined($event)"></app-join-room>
         </section>
 
         <!-- Room List Section -->
         <section class="lobby-section">
-          <h3 class="section-title">Available Rooms</h3>
+          <h3 class="section-title">{{ translationService.translate('app.lobby.availableRooms') }}</h3>
           <app-room-list></app-room-list>
         </section>
       </div>
@@ -65,15 +65,15 @@
       <!-- Online game info -->
       <div *ngIf="isOnlineMode && currentRoomId" class="online-game-info">
         <div class="room-info">
-          <span class="room-label">Room:</span>
+          <span class="room-label">{{ translationService.translate('app.onlineGame.room') }}:</span>
           <span class="room-id">{{ currentRoomId }}</span>
         </div>
         <div class="player-info">
-          <span class="player-label">Playing as:</span>
+          <span class="player-label">{{ translationService.translate('app.onlineGame.playingAs') }}:</span>
           <span class="player-name">{{ playerName }}</span>
         </div>
         <button class="leave-room-button" (click)="leaveRoom()">
-          Leave Room
+          {{ translationService.translate('app.onlineGame.leaveRoom') }}
         </button>
       </div>
 
@@ -85,6 +85,6 @@
   </main>
 
   <footer class="app-footer" role="contentinfo">
-    <p>Made with 💖 for magical moments</p>
+    <p>{{ translationService.translate('app.footer') }}</p>
   </footer>
 </div>

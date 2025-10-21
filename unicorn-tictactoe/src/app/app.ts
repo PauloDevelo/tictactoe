@@ -47,7 +47,7 @@ export class App implements OnInit, OnDestroy {
   constructor(
     private onlineGameService: OnlineGameService,
     private gameService: GameService,
-    private translationService: TranslationService
+    public readonly translationService: TranslationService
   ) {}
 
   ngOnInit(): void {

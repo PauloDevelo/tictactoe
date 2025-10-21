@@ -1,17 +1,54 @@
 {
+  "app": {
+    "title": "Morpion Licorne",
+    "subtitle": "Un jeu magique pour deux joueurs !",
+    "backToMenu": "Retour au menu",
+    "footer": "Fait avec 💖 pour des moments magiques",
+    "connection": {
+      "connected": "Connecté au serveur",
+      "connecting": "Connexion au serveur..."
+    },
+    "lobby": {
+      "title": "Lobby multijoueur en ligne",
+      "createRoom": "Créer une nouvelle salle",
+      "joinRoom": "Rejoindre une salle par ID",
+      "availableRooms": "Salles disponibles"
+    },
+    "onlineGame": {
+      "room": "Salle",
+      "playingAs": "Joue en tant que",
+      "leaveRoom": "Quitter la salle"
+    },
+    "aria": {
+      "returnToModeSelector": "Retour au sélecteur de mode",
+      "gameArea": "Zone de jeu"
+    }
+  },
   "common": {
     "buttons": {
       "ok": "OK",
       "cancel": "Annuler",
       "close": "Fermer",
-      "confirm": "Confirmer",
-      "back": "Retour",
-      "next": "Suivant",
       "save": "Enregistrer",
       "delete": "Supprimer",
       "edit": "Modifier",
+      "add": "Ajouter",
+      "remove": "Retirer",
+      "confirm": "Confirmer",
       "create": "Créer"
     },
+    "labels": {
+      "loading": "Chargement...",
+      "error": "Erreur",
+      "success": "Succès",
+      "warning": "Avertissement",
+      "info": "Information",
+      "yes": "Oui",
+      "no": "Non",
+      "name": "Nom",
+      "description": "Description"
+    }
+  },
     "labels": {
       "loading": "Chargement...",
       "error": "Erreur",
