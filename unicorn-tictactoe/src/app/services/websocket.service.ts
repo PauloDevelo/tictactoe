@@ -140,6 +140,16 @@ export class WebSocketService {
       }
     });
 
+    this.socket.on('player:joined', (data: any) => {
+      console.log('player:joined event received:', data);
+      if (data.player && data.gameState) {
+        this.playerJoined$.next({
+          player: data.player,
+          gameState: data.gameState
+        });
+      }
+    });
+
     this.socket.on('room:updated', (data: any) => {
       console.log('room:updated event received:', data);
       if (data.room && data.room.gameState) {

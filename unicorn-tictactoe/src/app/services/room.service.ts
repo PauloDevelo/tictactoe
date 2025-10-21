@@ -24,6 +24,7 @@ export interface Room {
   name: string;
   status: 'waiting' | 'ready' | 'playing' | 'finished';
   players: RoomPlayer[];
+  maxPlayers: number;
   gameState: RoomGameState;
   createdAt: string;
 }

@@ -66,6 +66,15 @@ io.on('connection', (socket: Socket) => {
       // Notify the player who joined
       socket.emit('room:joined', { room });
       
+      // Notify other players in the room that a new player joined
+      const joiningPlayer = room.players.find(p => p.id === socket.id);
+      if (joiningPlayer) {
+        socket.to(roomId).emit('player:joined', { 
+          player: joiningPlayer,
+          gameState: room.gameState 
+        });
+      }
+      
       // Notify all players in the room about the update
       io.to(roomId).emit('room:updated', { room });
       

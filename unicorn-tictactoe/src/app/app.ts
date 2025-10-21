@@ -62,8 +62,10 @@ export class App implements OnInit, OnDestroy {
       .subscribe(info => {
         if (info) {
           this.currentRoomId = info.roomId;
+          this.playerName = info.currentPlayer.name;
         } else {
           this.currentRoomId = null;
+          this.playerName = null;
         }
       });
 
