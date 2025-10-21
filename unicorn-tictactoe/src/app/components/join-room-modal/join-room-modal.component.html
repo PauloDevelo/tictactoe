@@ -8,13 +8,13 @@
 >
   <div class="modal-container">
     <div class="modal-header">
-      <h2 id="modal-title">🎮 Join Room</h2>
+      <h2 id="modal-title">🎮 {{ translationService.translate('room.joinRoomModal.title') }}</h2>
       <button 
         type="button"
         class="close-button" 
         (click)="onClose()"
         [disabled]="isJoining"
-        aria-label="Close modal"
+        [attr.aria-label]="translationService.translate('room.joinRoomModal.aria.closeModal')"
       >
         ✕
       </button>
@@ -24,23 +24,23 @@
       <!-- Room Details -->
       <div class="room-details">
         <div class="detail-row">
-          <span class="detail-label">Room Name:</span>
+          <span class="detail-label">{{ translationService.translate('room.joinRoomModal.roomName') }}:</span>
           <span class="detail-value">{{ room.name }}</span>
         </div>
         <div class="detail-row">
-          <span class="detail-label">Room ID:</span>
+          <span class="detail-label">{{ translationService.translate('room.joinRoomModal.roomId') }}:</span>
           <span class="detail-value room-id">{{ room.id }}</span>
         </div>
         <div class="detail-row">
-          <span class="detail-label">Players:</span>
-          <span class="detail-value">{{ room.players.length }} / {{ room.maxPlayers }}</span>
+          <span class="detail-label">{{ translationService.translate('room.joinRoomModal.players') }}:</span>
+          <span class="detail-value">{{ translationService.translate('room.joinRoomModal.playerCount', { current: room.players.length, max: room.maxPlayers }) }}</span>
         </div>
         <div class="detail-row">
-          <span class="detail-label">Status:</span>
-          <span class="detail-value" [class.status-waiting]="room.status === 'WAITING'" 
-                                      [class.status-ready]="room.status === 'READY'"
-                                      [class.status-in-progress]="room.status === 'IN_PROGRESS'"
-                                      [class.status-finished]="room.status === 'FINISHED'">
+          <span class="detail-label">{{ translationService.translate('room.joinRoomModal.status') }}:</span>
+          <span class="detail-value" [class.status-waiting]="room.status === 'waiting'" 
+                                      [class.status-ready]="room.status === 'ready'"
+                                      [class.status-in-progress]="room.status === 'playing'"
+                                      [class.status-finished]="room.status === 'finished'">
             {{ getRoomStatusText() }}
           </span>
         </div>
@@ -48,27 +48,28 @@
 
       <!-- Room Full Warning -->
       <div *ngIf="isRoomFull()" class="warning-message">
-        ⚠️ This room is full. You cannot join at this time.
+        ⚠️ {{ translationService.translate('room.joinRoomModal.roomFull') }}
       </div>
 
       <!-- Player Name Input -->
       <div class="form-group" *ngIf="!isRoomFull()">
-        <label for="playerName">Your Name</label>
+        <label for="playerName">{{ translationService.translate('room.joinRoomModal.yourName') }}</label>
         <input
           type="text"
           id="playerName"
           name="playerName"
           [(ngModel)]="playerName"
-          placeholder="Enter your name..."
+          [placeholder]="translationService.translate('room.joinRoomModal.playerNamePlaceholder')"
           [disabled]="isJoining"
           class="player-name-input"
           maxlength="20"
           autofocus
           aria-required="true"
+          [attr.aria-label]="translationService.translate('room.joinRoomModal.aria.playerNameRequired')"
           aria-describedby="player-name-hint"
         />
         <div id="player-name-hint" class="input-hint">
-          {{ playerName.length }}/20 characters (minimum 2)
+          {{ translationService.translate('room.joinRoomModal.charactersHint', { count: playerName.length }) }}
         </div>
       </div>
     </div>
@@ -80,7 +81,7 @@
         (click)="onClose()"
         [disabled]="isJoining"
       >
-        Cancel
+        {{ translationService.translate('common.buttons.cancel') }}
       </button>
       <button
         type="button"
@@ -89,7 +90,7 @@
         [disabled]="!canJoin()"
         *ngIf="!isRoomFull()"
       >
-        {{ isJoining ? '⏳ Joining...' : '🚀 Join Room' }}
+        {{ isJoining ? '⏳ ' + translationService.translate('room.joinRoomModal.joining') : '🚀 ' + translationService.translate('room.joinRoomModal.joinButton') }}
       </button>
     </div>
   </div>

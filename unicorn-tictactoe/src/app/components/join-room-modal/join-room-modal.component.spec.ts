@@ -1,11 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { JoinRoomModalComponent } from './join-room-modal.component';
 import { Room } from '../../services/room.service';
+import { TranslationService } from '../../services/translation.service';
 
 describe('JoinRoomModalComponent', () => {
   let component: JoinRoomModalComponent;
   let fixture: ComponentFixture<JoinRoomModalComponent>;
+  let translationService: TranslationService;
 
   const mockRoom: Room = {
     id: 'ABC123',
@@ -32,11 +36,21 @@ describe('JoinRoomModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [JoinRoomModalComponent, FormsModule]
+      imports: [JoinRoomModalComponent, FormsModule],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        TranslationService
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(JoinRoomModalComponent);
     component = fixture.componentInstance;
+    translationService = TestBed.inject(TranslationService);
+    
+    // Mock translation service to return keys as-is for testing
+    spyOn(translationService, 'translate').and.callFake((key: string) => key);
+    
     fixture.detectChanges();
   });
 
@@ -240,22 +254,26 @@ describe('JoinRoomModalComponent', () => {
 
     it('should return correct text for WAITING status', () => {
       component.room = { ...mockRoom, status: 'waiting' };
-      expect(component.getRoomStatusText()).toBe('Waiting for players');
+      expect(component.getRoomStatusText()).toBe('room.joinRoomModal.statusText.waiting');
+      expect(translationService.translate).toHaveBeenCalledWith('room.joinRoomModal.statusText.waiting');
     });
 
     it('should return correct text for READY status', () => {
       component.room = { ...mockRoom, status: 'ready' };
-      expect(component.getRoomStatusText()).toBe('Ready to start');
+      expect(component.getRoomStatusText()).toBe('room.joinRoomModal.statusText.ready');
+      expect(translationService.translate).toHaveBeenCalledWith('room.joinRoomModal.statusText.ready');
     });
 
     it('should return correct text for IN_PROGRESS status', () => {
       component.room = { ...mockRoom, status: 'playing' };
-      expect(component.getRoomStatusText()).toBe('Game in progress');
+      expect(component.getRoomStatusText()).toBe('room.joinRoomModal.statusText.playing');
+      expect(translationService.translate).toHaveBeenCalledWith('room.joinRoomModal.statusText.playing');
     });
 
     it('should return correct text for FINISHED status', () => {
       component.room = { ...mockRoom, status: 'finished' };
-      expect(component.getRoomStatusText()).toBe('Game finished');
+      expect(component.getRoomStatusText()).toBe('room.joinRoomModal.statusText.finished');
+      expect(translationService.translate).toHaveBeenCalledWith('room.joinRoomModal.statusText.finished');
     });
   });
 

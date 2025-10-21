@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Room } from '../../models/room.interface';
-import { RoomStatus } from '../../models/room-status.enum';
+import { Room } from '../../services/room.service';
+import { TranslationService } from '../../services/translation.service';
 
 export interface JoinRoomModalData {
   roomId: string;
@@ -24,6 +24,10 @@ export class JoinRoomModalComponent {
 
   playerName = '';
   isJoining = false;
+
+  constructor(
+    public readonly translationService: TranslationService
+  ) {}
 
   /**
    * Handle join button click
@@ -99,14 +103,14 @@ export class JoinRoomModalComponent {
     }
 
     switch (this.room.status) {
-      case RoomStatus.WAITING:
-        return 'Waiting for players';
-      case RoomStatus.READY:
-        return 'Ready to start';
-      case RoomStatus.IN_PROGRESS:
-        return 'Game in progress';
-      case RoomStatus.FINISHED:
-        return 'Game finished';
+      case 'waiting':
+        return this.translationService.translate('room.joinRoomModal.statusText.waiting');
+      case 'ready':
+        return this.translationService.translate('room.joinRoomModal.statusText.ready');
+      case 'playing':
+        return this.translationService.translate('room.joinRoomModal.statusText.playing');
+      case 'finished':
+        return this.translationService.translate('room.joinRoomModal.statusText.finished');
       default:
         return this.room.status;
     }

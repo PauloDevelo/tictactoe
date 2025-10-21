@@ -126,6 +126,30 @@
         "step3": "Cliquez sur \"Rejoindre la salle\" pour commencer à jouer"
       }
     },
+    "joinRoomModal": {
+      "title": "Rejoindre la salle",
+      "roomName": "Nom de la salle",
+      "roomId": "ID de la salle",
+      "players": "Joueurs",
+      "status": "Statut",
+      "playerCount": "{{current}} / {{max}}",
+      "roomFull": "Cette salle est complète. Vous ne pouvez pas la rejoindre pour le moment.",
+      "yourName": "Votre nom",
+      "playerNamePlaceholder": "Entrez votre nom...",
+      "joinButton": "Rejoindre la salle",
+      "joining": "Connexion...",
+      "charactersHint": "{{count}}/20 caractères (minimum 2)",
+      "statusText": {
+        "waiting": "En attente de joueurs",
+        "ready": "Prêt à commencer",
+        "playing": "Partie en cours",
+        "finished": "Partie terminée"
+      },
+      "aria": {
+        "closeModal": "Fermer la fenêtre",
+        "playerNameRequired": "Le nom du joueur est requis"
+      }
+    },
     "list": {
       "title": "Salles de jeu",
       "refreshButton": "Actualiser",

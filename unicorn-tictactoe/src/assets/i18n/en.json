@@ -125,6 +125,30 @@
         "step3": "Click \"Join Room\" to start playing"
       }
     },
+    "joinRoomModal": {
+      "title": "Join Room",
+      "roomName": "Room Name",
+      "roomId": "Room ID",
+      "players": "Players",
+      "status": "Status",
+      "playerCount": "{{current}} / {{max}}",
+      "roomFull": "This room is full. You cannot join at this time.",
+      "yourName": "Your Name",
+      "playerNamePlaceholder": "Enter your name...",
+      "joinButton": "Join Room",
+      "joining": "Joining...",
+      "charactersHint": "{{count}}/20 characters (minimum 2)",
+      "statusText": {
+        "waiting": "Waiting for players",
+        "ready": "Ready to start",
+        "playing": "Game in progress",
+        "finished": "Game finished"
+      },
+      "aria": {
+        "closeModal": "Close modal",
+        "playerNameRequired": "Player name is required"
+      }
+    },
     "list": {
       "title": "Game Rooms",
       "refreshButton": "Refresh",
