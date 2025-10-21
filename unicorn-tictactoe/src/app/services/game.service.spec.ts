@@ -509,23 +509,24 @@ describe('GameService - Win/Draw Detection', () => {
     });
 
     it('should accumulate scores across multiple games', () => {
-      // Game 1: UNICORN wins
-      service.makeMove(0);
-      service.makeMove(3);
-      service.makeMove(1);
-      service.makeMove(4);
-      service.makeMove(2);
+      // Game 1: UNICORN starts and wins
+      service.makeMove(0); // UNICORN
+      service.makeMove(3); // CAT
+      service.makeMove(1); // UNICORN
+      service.makeMove(4); // CAT
+      service.makeMove(2); // UNICORN wins (0,1,2)
       
       expect(service.getCurrentState().scores.unicorn).toBe(1);
       
-      // Reset and play game 2: CAT wins
+      // Reset - CAT should start now (alternating first player)
       service.resetGame();
-      service.makeMove(0);
-      service.makeMove(3);
-      service.makeMove(1);
-      service.makeMove(4);
-      service.makeMove(6);
-      service.makeMove(5);
+      
+      // Game 2: CAT starts and wins
+      service.makeMove(0); // CAT
+      service.makeMove(1); // UNICORN
+      service.makeMove(3); // CAT
+      service.makeMove(2); // UNICORN
+      service.makeMove(6); // CAT wins (0,3,6)
       
       const finalState = service.getCurrentState();
       expect(finalState.scores.unicorn).toBe(1);
