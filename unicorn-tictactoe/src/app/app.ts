@@ -8,7 +8,6 @@ import { GameControls } from './components/game-controls/game-controls';
 import { GameModeSelectorComponent } from './components/game-mode-selector/game-mode-selector.component';
 import { RoomListComponent } from './components/room-list/room-list.component';
 import { CreateRoomComponent, CreateRoomData } from './components/create-room/create-room.component';
-import { JoinRoomComponent } from './components/join-room/join-room.component';
 import { GameMode } from './models/game-mode.model';
 import { OnlineGameService } from './services/online-game.service';
 import { GameService } from './services/game.service';
@@ -24,8 +23,7 @@ import { Room } from './services/room.service';
     GameControls,
     GameModeSelectorComponent,
     RoomListComponent,
-    CreateRoomComponent,
-    JoinRoomComponent
+    CreateRoomComponent
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'
@@ -105,14 +103,6 @@ export class App implements OnInit, OnDestroy {
   onRoomCreated(data: CreateRoomData): void {
     this.onlineGameService.joinRoom(data.room.id, data.playerName);
     this.currentRoomId = data.room.id;
-    this.playerName = data.playerName;
-  }
-
-  /**
-   * Handle room joined event
-   */
-  onRoomJoined(data: { roomId: string; playerName: string }): void {
-    this.currentRoomId = data.roomId;
     this.playerName = data.playerName;
   }
 

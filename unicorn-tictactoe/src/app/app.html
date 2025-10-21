@@ -46,12 +46,6 @@
           <app-create-room (roomCreated)="onRoomCreated($event)"></app-create-room>
         </section>
 
-        <!-- Join Room Section -->
-        <section class="lobby-section">
-          <h3 class="section-title">{{ translationService.translate('app.lobby.joinRoom') }}</h3>
-          <app-join-room (roomJoined)="onRoomJoined($event)"></app-join-room>
-        </section>
-
         <!-- Room List Section -->
         <section class="lobby-section">
           <h3 class="section-title">{{ translationService.translate('app.lobby.availableRooms') }}</h3>

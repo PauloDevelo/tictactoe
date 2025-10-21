@@ -9,6 +9,12 @@ export interface JoinRoomData {
   playerName: string;
 }
 
+/**
+ * @deprecated This component has been replaced by JoinRoomModalComponent.
+ * The join room functionality is now integrated into the room list via a modal dialog.
+ * This component is kept for reference but is no longer used in the application.
+ * See: app/components/join-room-modal/join-room-modal.component.ts
+ */
 @Component({
   selector: 'app-join-room',
   standalone: true,
