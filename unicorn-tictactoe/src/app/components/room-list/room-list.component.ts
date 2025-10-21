@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subject, interval } from 'rxjs';
 import { takeUntil, switchMap, startWith } from 'rxjs/operators';
@@ -17,6 +17,8 @@ export class RoomListComponent implements OnInit, OnDestroy {
   loading = false;
   error: string | null = null;
   private destroy$ = new Subject<void>();
+
+  @Output() roomClicked = new EventEmitter<Room>();
 
   constructor(
     private roomService: RoomService,
@@ -140,5 +142,15 @@ export class RoomListComponent implements OnInit, OnDestroy {
    */
   trackByRoomId(index: number, room: Room): string {
     return room.id;
+  }
+
+  /**
+   * Handle room click event
+   * Only emits event if room is not full
+   */
+  onRoomClick(room: Room): void {
+    if (!this.isRoomFull(room)) {
+      this.roomClicked.emit(room);
+    }
   }
 }

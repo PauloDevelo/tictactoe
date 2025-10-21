@@ -18,7 +18,11 @@
   <div *ngIf="getAvailableRooms().length > 0" class="room-section">
     <h3>{{ translationService.translate('room.list.availableRooms') }}</h3>
     <div class="room-grid">
-      <div *ngFor="let room of getAvailableRooms(); trackBy: trackByRoomId" class="room-card">
+      <div *ngFor="let room of getAvailableRooms(); trackBy: trackByRoomId" 
+           class="room-card"
+           [class.clickable]="!isRoomFull(room)"
+           [class.full]="isRoomFull(room)"
+           (click)="onRoomClick(room)">
         <div class="room-header">
           <h4>{{ room.name }}</h4>
           <span class="status-badge" [ngClass]="getStatusClass(room.status)">

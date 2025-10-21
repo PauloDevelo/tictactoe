@@ -76,12 +76,28 @@
   border: 2px solid #e0e0e0;
   border-radius: 10px;
   padding: 20px;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: all 0.2s ease;
 }
 
-.room-card:hover {
+.room-card.clickable {
+  cursor: pointer;
+}
+
+.room-card.clickable:hover {
+  background-color: #f0f0f0;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.room-card.full {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.room-card.full:hover {
+  transform: none;
+  box-shadow: none;
+  background-color: white;
 }
 
 .room-card.active {

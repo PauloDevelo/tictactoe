@@ -241,4 +241,35 @@ describe('RoomListComponent', () => {
       expect(component['destroy$'].complete).toHaveBeenCalled();
     });
   });
+
+  describe('onRoomClick', () => {
+    it('should emit roomClicked event when room is not full', () => {
+      const room = mockRooms[0]; // Waiting room with no players
+      mockRoomService.isRoomFull.and.returnValue(false);
+      spyOn(component.roomClicked, 'emit');
+
+      component.onRoomClick(room);
+
+      expect(component.roomClicked.emit).toHaveBeenCalledWith(room);
+    });
+
+    it('should not emit roomClicked event when room is full', () => {
+      const room = mockRooms[1]; // Active room with 2 players
+      mockRoomService.isRoomFull.and.returnValue(true);
+      spyOn(component.roomClicked, 'emit');
+
+      component.onRoomClick(room);
+
+      expect(component.roomClicked.emit).not.toHaveBeenCalled();
+    });
+
+    it('should check if room is full before emitting', () => {
+      const room = mockRooms[0];
+      mockRoomService.isRoomFull.and.returnValue(false);
+
+      component.onRoomClick(room);
+
+      expect(mockRoomService.isRoomFull).toHaveBeenCalledWith(room);
+    });
+  });
 });
