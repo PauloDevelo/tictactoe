@@ -255,8 +255,18 @@ export class OnlineGameService {
     const gameState = this.convertBackendToFrontendState(backendState);
     this.gameState$.next(gameState);
 
+    let currentPlayer = currentInfo.currentPlayer;
     let opponent = currentInfo.opponent;
+    
+    // Update both current player and opponent from the players array if available
+    // This is crucial for handling symbol swaps after game resets
     if (players && players.length > 0) {
+      const updatedCurrentPlayer = players.find(p => p.id === currentInfo.currentPlayer.id);
+      if (updatedCurrentPlayer) {
+        console.log('Updated current player from game update:', updatedCurrentPlayer);
+        currentPlayer = updatedCurrentPlayer;
+      }
+      
       const opponentPlayer = players.find(p => p.id !== currentInfo.currentPlayer.id);
       if (opponentPlayer) {
         console.log('Updated opponent from game update:', opponentPlayer);
@@ -264,15 +274,16 @@ export class OnlineGameService {
       }
     }
 
-    const isMyTurn = this.calculateIsMyTurn(currentInfo.currentPlayer.symbol, backendState.currentTurn);
+    const isMyTurn = this.calculateIsMyTurn(currentPlayer.symbol, backendState.currentTurn);
     console.log('Is my turn calculation in update:', { 
-      mySymbol: currentInfo.currentPlayer.symbol, 
+      mySymbol: currentPlayer.symbol, 
       currentTurn: backendState.currentTurn, 
       isMyTurn 
     });
 
     const updatedInfo: OnlineGameInfo = {
       ...currentInfo,
+      currentPlayer,
       opponent,
       isMyTurn
     };
