@@ -15,7 +15,7 @@
     "backup": "bash deployment/backup.sh",
     "rollback": "bash deployment/rollback.sh",
     "docker:build": "docker build -t tictactoe-api .",
-    "docker:run": "docker run -p 3000:3000 --env-file .env tictactoe-api",
+    "docker:run": "docker run -p 3021:3021 --env-file .env tictactoe-api",
     "docker:compose:up": "docker-compose up -d",
     "docker:compose:down": "docker-compose down",
     "docker:compose:logs": "docker-compose logs -f"

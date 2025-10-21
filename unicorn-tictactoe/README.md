@@ -52,7 +52,7 @@ Open your browser to `http://localhost:4200/` and start playing!
 cd ../backend
 npm install
 npm run dev
-# Backend runs on http://localhost:3000
+# Backend runs on http://localhost:3021
 ```
 
 ## 🎯 How to Play

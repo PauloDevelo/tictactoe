@@ -80,7 +80,7 @@ nano .env
 Required environment variables:
 ```env
 NODE_ENV=production
-PORT=3000
+PORT=3021
 CORS_ORIGIN=https://your-domain.com
 ```
 
@@ -273,7 +273,7 @@ cd /opt/tictactoe-backend/backend
 sudo bash deployment/health-check.sh
 
 # Manual health check
-curl http://localhost:3000/health
+curl http://localhost:3021/health
 ```
 
 ### System Monitoring
@@ -385,7 +385,7 @@ pm2 list
 pm2 logs tictactoe-api --err
 
 # Check if port is in use
-sudo lsof -i :3000
+sudo lsof -i :3021
 
 # Restart application
 pm2 restart tictactoe-api
@@ -416,7 +416,7 @@ grep -A 5 "location /socket.io/" /etc/nginx/sites-available/tictactoe
 sudo ufw status
 
 # Test WebSocket connection
-wscat -c ws://localhost:3000/socket.io/
+wscat -c ws://localhost:3021/socket.io/
 ```
 
 ### SSL Certificate Issues

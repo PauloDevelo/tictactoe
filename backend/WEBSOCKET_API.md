@@ -6,7 +6,7 @@ This document describes the WebSocket API for the Tic-Tac-Toe multiplayer game s
 
 ## Connection
 
-**Endpoint:** `ws://localhost:3000` (or configured PORT)
+**Endpoint:** `ws://localhost:3021` (or configured PORT)
 
 **CORS:** Configured to accept connections from `http://localhost:4200` (or configured CORS_ORIGIN)
 

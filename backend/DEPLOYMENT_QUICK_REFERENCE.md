@@ -110,7 +110,7 @@ sudo journalctl -u tictactoe-api -f
 docker build -t tictactoe-api .
 
 # Run container
-docker run -p 3000:3000 --env-file .env tictactoe-api
+docker run -p 3021:3021 --env-file .env tictactoe-api
 
 # Docker Compose - Start
 docker-compose up -d
@@ -194,7 +194,7 @@ npm run docker:compose:down
 
 ```env
 NODE_ENV=production
-PORT=3000
+PORT=3021
 CORS_ORIGIN=https://your-domain.com
 ```
 
@@ -209,7 +209,7 @@ module.exports = {
     exec_mode: 'cluster',
     env: {
       NODE_ENV: 'production',
-      PORT: 3000,
+      PORT: 3021,
     }
   }]
 };
@@ -232,13 +232,13 @@ Key sections:
 
 ```bash
 # Local
-curl http://localhost:3000/health
+curl http://localhost:3021/health
 
 # Remote
 curl https://your-domain.com/health
 
 # With details
-curl -v http://localhost:3000/health
+curl -v http://localhost:3021/health
 ```
 
 ### Automated Health Check
@@ -267,10 +267,10 @@ pm2 list
 pm2 logs tictactoe-api --err
 
 # Check if port is in use
-sudo lsof -i :3000
+sudo lsof -i :3021
 
 # Kill process on port
-sudo kill -9 $(sudo lsof -t -i:3000)
+sudo kill -9 $(sudo lsof -t -i:3021)
 ```
 
 ### High Memory Usage
@@ -293,7 +293,7 @@ pm2 restart tictactoe-api
 grep -A 10 "location /socket.io/" /etc/nginx/sites-available/tictactoe
 
 # Test WebSocket
-wscat -c ws://localhost:3000/socket.io/
+wscat -c ws://localhost:3021/socket.io/
 
 # Check firewall
 sudo ufw status
@@ -477,7 +477,7 @@ alias pm2-logs='pm2 logs tictactoe-api'
 alias pm2-restart='pm2 restart tictactoe-api'
 alias nginx-reload='sudo systemctl reload nginx'
 alias nginx-test='sudo nginx -t'
-alias app-health='curl http://localhost:3000/health'
+alias app-health='curl http://localhost:3021/health'
 alias app-deploy='cd /opt/tictactoe-backend/backend && sudo bash deployment/deploy.sh'
 ```
 

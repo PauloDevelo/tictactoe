@@ -39,7 +39,7 @@ public gameState$ = this.gameStateSubject.asObservable();
 ### Development Setup
 ```bash
 # Backend (Terminal 1)
-cd backend && npm install && npm run dev  # Port 3000
+cd backend && npm install && npm run dev  # Port 3021
 
 # Frontend (Terminal 2)  
 cd unicorn-tictactoe && npm install && npm start  # Port 4200

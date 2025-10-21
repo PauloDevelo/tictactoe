@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  wsUrl: 'https://your-production-url.com'
+  wsUrl: 'https://tictactoe.snpdnd.com'
 };

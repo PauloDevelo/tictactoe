@@ -12,7 +12,7 @@ WorkingDirectory=/opt/tictactoe-backend/backend
 
 # Environment
 Environment=NODE_ENV=production
-Environment=PORT=3000
+Environment=PORT=3021
 
 # PM2 commands
 ExecStart=/usr/bin/pm2 start deployment/ecosystem.config.js --no-daemon
