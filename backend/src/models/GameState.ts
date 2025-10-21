@@ -8,6 +8,7 @@ export interface GameState {
   status: GameStatus;
   winner: 'X' | 'O' | 'draw' | null;
   winningLine: number[] | null;
+  lastStartingPlayer?: 'X' | 'O'; // Track the last starting player for alternating
 }
 
 export const createInitialGameState = (): GameState => ({
@@ -16,6 +17,7 @@ export const createInitialGameState = (): GameState => ({
   status: 'waiting',
   winner: null,
   winningLine: null,
+  lastStartingPlayer: 'O', // Set to 'O' so first game starts with 'X'
 });
 
 export const makeMove = (
@@ -46,9 +48,22 @@ export const makeMove = (
 export const startGame = (state: GameState): GameState => ({
   ...state,
   status: 'playing',
+  lastStartingPlayer: state.currentTurn, // Track who starts this game for alternating
 });
 
-export const resetGame = (): GameState => createInitialGameState();
+export const resetGame = (previousState?: GameState): GameState => {
+  // Alternate the starting player based on the previous game
+  const nextStartingPlayer = previousState?.lastStartingPlayer === 'X' ? 'O' : 'X';
+  
+  return {
+    board: Array(9).fill(null),
+    currentTurn: nextStartingPlayer,
+    status: 'waiting',
+    winner: null,
+    winningLine: null,
+    lastStartingPlayer: nextStartingPlayer,
+  };
+};
 
 const WINNING_COMBINATIONS = [
   [0, 1, 2],

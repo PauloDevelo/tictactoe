@@ -55,8 +55,11 @@ export class RoomService {
 
     let symbol: 'X' | 'O';
     if (room.players.length === 0) {
-      symbol = 'X';
+      // First player joining: use the game state's current turn
+      // This respects the alternating starting player logic from previous games
+      symbol = room.gameState.currentTurn;
     } else {
+      // Second player gets the opposite symbol
       const existingPlayerSymbol = room.players[0].symbol;
       symbol = existingPlayerSymbol === 'X' ? 'O' : 'X';
     }
@@ -200,11 +203,27 @@ export class RoomService {
       throw new Error(`Room ${roomId} not found`);
     }
 
-    const updatedGameState = resetGame();
+    const updatedGameState = resetGame(room.gameState); // Pass previous state to alternate starting player
     let updatedRoom = updateGameState(room, updatedGameState);
 
+    // Swap player symbols to match the new starting player
+    if (isRoomFull(updatedRoom) && updatedRoom.players.length === 2) {
+      const [player1, player2] = updatedRoom.players;
+      // If the new starting player symbol doesn't match the first player's symbol, swap them
+      if (player1.symbol !== updatedGameState.currentTurn) {
+        updatedRoom = {
+          ...updatedRoom,
+          players: [
+            { ...player1, symbol: updatedGameState.currentTurn },
+            { ...player2, symbol: updatedGameState.currentTurn === 'X' ? 'O' : 'X' }
+          ]
+        };
+        console.log(`🔄 Swapped player symbols: ${player1.name} now has ${updatedGameState.currentTurn}, ${player2.name} has ${updatedGameState.currentTurn === 'X' ? 'O' : 'X'}`);
+      }
+    }
+
     if (isRoomFull(updatedRoom)) {
-      console.log(`🔄 Resetting game in room ${roomId} with 2 players, auto-starting`);
+      console.log(`🔄 Resetting game in room ${roomId} with 2 players, auto-starting. New starting player: ${updatedGameState.currentTurn}`);
       const startedGameState = startGame(updatedGameState);
       updatedRoom = updateGameState(updatedRoom, startedGameState);
       updatedRoom = updateRoomStatus(updatedRoom, 'playing');
