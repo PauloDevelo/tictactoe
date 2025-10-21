@@ -242,11 +242,13 @@ describe('RoomService', () => {
       expect(resetRoom.status).toBe('playing');
       expect(resetRoom.gameState.status).toBe('playing');
       
-      // Should be able to make moves
-      const room = roomService.makeMove('room1', 'player1', 0);
-      // Check that player1's symbol is placed (could be X or O after alternating)
-      const player1Symbol = room.players.find(p => p.id === 'player1')?.symbol;
-      expect(room.gameState.board[0]).toBe(player1Symbol);
+      // Starting player should alternate: Game 1 was X, Game 2 should be O
+      expect(resetRoom.gameState.currentTurn).toBe('O');
+      
+      // Player2 (O) should be able to make the first move after reset
+      const room = roomService.makeMove('room1', 'player2', 0);
+      expect(room.gameState.board[0]).toBe('O');
+      expect(room.gameState.currentTurn).toBe('X');
     });
 
     it('should set room status to finished when game ends', () => {

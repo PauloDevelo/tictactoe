@@ -206,21 +206,8 @@ export class RoomService {
     const updatedGameState = resetGame(room.gameState); // Pass previous state to alternate starting player
     let updatedRoom = updateGameState(room, updatedGameState);
 
-    // Swap player symbols to match the new starting player
-    if (isRoomFull(updatedRoom) && updatedRoom.players.length === 2) {
-      const [player1, player2] = updatedRoom.players;
-      // If the new starting player symbol doesn't match the first player's symbol, swap them
-      if (player1.symbol !== updatedGameState.currentTurn) {
-        updatedRoom = {
-          ...updatedRoom,
-          players: [
-            { ...player1, symbol: updatedGameState.currentTurn },
-            { ...player2, symbol: updatedGameState.currentTurn === 'X' ? 'O' : 'X' }
-          ]
-        };
-        console.log(`🔄 Swapped player symbols: ${player1.name} now has ${updatedGameState.currentTurn}, ${player2.name} has ${updatedGameState.currentTurn === 'X' ? 'O' : 'X'}`);
-      }
-    }
+    // Players keep their symbols - only the starting turn alternates
+    console.log(`🔄 Game reset - players keep their symbols. Starting player: ${updatedGameState.currentTurn}`);
 
     if (isRoomFull(updatedRoom)) {
       console.log(`🔄 Resetting game in room ${roomId} with 2 players, auto-starting. New starting player: ${updatedGameState.currentTurn}`);
