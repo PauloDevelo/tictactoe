@@ -157,7 +157,7 @@ Edit `/var/www/tictactoe/backend/.env`:
 
 ```env
 # Server Configuration
-PORT=3000
+PORT=3021
 NODE_ENV=production
 
 # CORS Configuration
@@ -269,7 +269,7 @@ sudo systemctl reload nginx
 sudo systemctl status nginx
 
 # Test endpoints
-curl http://localhost:3000/health  # Backend health check
+curl http://localhost:3021/health  # Backend health check
 curl https://your-domain.com/health  # Through Nginx
 ```
 
@@ -403,7 +403,7 @@ ls -lh ~/backups/
 pm2 logs tictactoe-api --err
 
 # Check if port is in use
-sudo netstat -tlnp | grep 3000
+sudo netstat -tlnp | grep 3021
 
 # Restart application
 pm2 restart tictactoe-api

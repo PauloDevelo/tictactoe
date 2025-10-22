@@ -55,8 +55,11 @@ export class RoomService {
 
     let symbol: 'X' | 'O';
     if (room.players.length === 0) {
-      symbol = 'X';
+      // First player joining: use the game state's current turn
+      // This respects the alternating starting player logic from previous games
+      symbol = room.gameState.currentTurn;
     } else {
+      // Second player gets the opposite symbol
       const existingPlayerSymbol = room.players[0].symbol;
       symbol = existingPlayerSymbol === 'X' ? 'O' : 'X';
     }
@@ -200,11 +203,14 @@ export class RoomService {
       throw new Error(`Room ${roomId} not found`);
     }
 
-    const updatedGameState = resetGame();
+    const updatedGameState = resetGame(room.gameState); // Pass previous state to alternate starting player
     let updatedRoom = updateGameState(room, updatedGameState);
 
+    // Players keep their symbols - only the starting turn alternates
+    console.log(`🔄 Game reset - players keep their symbols. Starting player: ${updatedGameState.currentTurn}`);
+
     if (isRoomFull(updatedRoom)) {
-      console.log(`🔄 Resetting game in room ${roomId} with 2 players, auto-starting`);
+      console.log(`🔄 Resetting game in room ${roomId} with 2 players, auto-starting. New starting player: ${updatedGameState.currentTurn}`);
       const startedGameState = startGame(updatedGameState);
       updatedRoom = updateGameState(updatedRoom, startedGameState);
       updatedRoom = updateRoomStatus(updatedRoom, 'playing');

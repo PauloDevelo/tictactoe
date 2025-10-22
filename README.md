@@ -53,7 +53,7 @@ cd tictactoe
 cd backend
 npm install
 npm run dev
-# Backend runs on http://localhost:3000
+# Backend runs on http://localhost:3021
 
 # In a new terminal, install and run frontend
 cd unicorn-tictactoe

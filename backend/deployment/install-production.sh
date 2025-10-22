@@ -171,7 +171,7 @@ su - tictactoe -c "mkdir -p ~/backups"
 print_status "Creating environment file template..."
 cat > /var/www/tictactoe/backend/.env.example << EOF
 # Server Configuration
-PORT=3000
+PORT=3021
 NODE_ENV=production
 
 # CORS Configuration

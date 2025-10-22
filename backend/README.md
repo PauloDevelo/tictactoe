@@ -42,7 +42,7 @@ cp .env.example .env
 npm run dev
 ```
 
-Server runs on `http://localhost:3000`
+Server runs on `http://localhost:3021`
 
 ### Environment Variables
 
@@ -50,7 +50,7 @@ Create `.env` file:
 
 ```env
 # Server Configuration
-PORT=3000
+PORT=3021
 NODE_ENV=development
 
 # CORS Configuration
@@ -332,7 +332,7 @@ npm run docker:compose:logs # View Docker logs
 
 ```bash
 npm run dev
-# Server runs on http://localhost:3000
+# Server runs on http://localhost:3021
 ```
 
 ### Production Deployment
@@ -373,7 +373,7 @@ pm2 restart tictactoe-api
 docker build -t tictactoe-api .
 
 # Run container
-docker run -p 3000:3000 --env-file .env tictactoe-api
+docker run -p 3021:3021 --env-file .env tictactoe-api
 
 # Or use Docker Compose
 docker-compose up -d
@@ -477,11 +477,11 @@ PORT=3001
 
 # Or kill process using port
 # Windows:
-netstat -ano | findstr :3000
+netstat -ano | findstr :3021
 taskkill /PID <PID> /F
 
 # Linux/Mac:
-lsof -ti:3000 | xargs kill
+lsof -ti:3021 | xargs kill
 ```
 
 **CORS Errors:**
@@ -496,7 +496,7 @@ npm run dev
 **WebSocket Connection Failed:**
 ```bash
 # Check server is running
-curl http://localhost:3000/health
+curl http://localhost:3021/health
 
 # Check CORS configuration
 # Check firewall settings

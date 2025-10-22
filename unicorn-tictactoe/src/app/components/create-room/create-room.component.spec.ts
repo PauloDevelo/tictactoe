@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { of, throwError } from 'rxjs';
+import { of, throwError, Subject } from 'rxjs';
 import { CreateRoomComponent } from './create-room.component';
 import { RoomService, Room } from '../../services/room.service';
 import { TranslationService } from '../../services/translation.service';
@@ -172,14 +172,28 @@ describe('CreateRoomComponent', () => {
       }, 100);
     });
 
-    it('should set creating state while creating room', () => {
+    it('should set creating state while creating room', (done) => {
       component.roomName = 'Valid Room Name';
       component.playerName = 'Alice';
-      mockRoomService.createRoom.and.returnValue(of(mockRoom));
+      
+      // Use a Subject to control when the observable completes
+      const subject = new Subject<Room>();
+      mockRoomService.createRoom.and.returnValue(subject.asObservable());
 
       component.createRoom();
 
+      // Check that creating is true before the observable completes
       expect(component.creating).toBe(true);
+      
+      // Complete the observable
+      subject.next(mockRoom);
+      subject.complete();
+      
+      // Check that creating is false after completion
+      setTimeout(() => {
+        expect(component.creating).toBe(false);
+        done();
+      }, 0);
     });
   });
 

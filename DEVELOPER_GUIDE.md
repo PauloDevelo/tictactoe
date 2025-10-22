@@ -46,7 +46,7 @@ npm install
 ```bash
 cd backend
 npm run dev
-# Server runs on http://localhost:3000
+# Server runs on http://localhost:3021
 # Hot-reload enabled with nodemon
 ```
 
@@ -62,7 +62,7 @@ npm start
 
 **Backend** - Create `backend/.env`:
 ```env
-PORT=3000
+PORT=3021
 NODE_ENV=development
 CORS_ORIGIN=http://localhost:4200
 ```
@@ -71,7 +71,7 @@ CORS_ORIGIN=http://localhost:4200
 ```typescript
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000'
+  apiUrl: 'http://localhost:3021'
 };
 ```
 
@@ -804,7 +804,7 @@ docker-compose up -d
 
 # Or build manually
 docker build -t tictactoe-api .
-docker run -p 3000:3000 --env-file .env tictactoe-api
+docker run -p 3021:3021 --env-file .env tictactoe-api
 ```
 
 ## 🤝 Contributing

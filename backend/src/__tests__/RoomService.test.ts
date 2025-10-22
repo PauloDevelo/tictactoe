@@ -161,19 +161,22 @@ describe('RoomService', () => {
       expect(room.players[0].isReady).toBe(true);
     });
 
-    it('should change room status to ready when all players ready', () => {
+    it('should auto-start game when room is full (both players join)', () => {
+      // Room auto-starts when full, regardless of ready status
+      const room = roomService.getRoom('room1');
+
+      expect(room).toBeDefined();
+      expect(room?.status).toBe('playing');
+      expect(room?.gameState.status).toBe('playing');
+    });
+
+    it('should maintain ready status when set manually', () => {
+      // Even though game is auto-started, ready status can still be set
       roomService.setPlayerReady('room1', 'player1', true);
       const room = roomService.setPlayerReady('room1', 'player2', true);
 
-      expect(room.status).toBe('ready');
-    });
-
-    it('should change room status back to waiting if player unready', () => {
-      roomService.setPlayerReady('room1', 'player1', true);
-      roomService.setPlayerReady('room1', 'player2', true);
-      const room = roomService.setPlayerReady('room1', 'player1', false);
-
-      expect(room.status).toBe('waiting');
+      expect(room.players[0].isReady).toBe(true);
+      expect(room.players[1].isReady).toBe(true);
     });
 
     it('should throw error if player not found', () => {
@@ -232,12 +235,20 @@ describe('RoomService', () => {
       }).toThrow('Not your turn');
     });
 
-    it('should throw error if game not in progress', () => {
-      roomService.resetGame('room1');
-
-      expect(() => {
-        roomService.makeMove('room1', 'player1', 0);
-      }).toThrow('Game is not in progress');
+    it('should allow moves after reset (game auto-restarts)', () => {
+      // After reset, game auto-starts again since room is full
+      const resetRoom = roomService.resetGame('room1');
+      
+      expect(resetRoom.status).toBe('playing');
+      expect(resetRoom.gameState.status).toBe('playing');
+      
+      // Starting player should alternate: Game 1 was X, Game 2 should be O
+      expect(resetRoom.gameState.currentTurn).toBe('O');
+      
+      // Player2 (O) should be able to make the first move after reset
+      const room = roomService.makeMove('room1', 'player2', 0);
+      expect(room.gameState.board[0]).toBe('O');
+      expect(room.gameState.currentTurn).toBe('X');
     });
 
     it('should set room status to finished when game ends', () => {
@@ -264,18 +275,41 @@ describe('RoomService', () => {
       roomService.makeMove('room1', 'player1', 0);
     });
 
-    it('should reset game state', () => {
+    it('should reset game state and auto-restart when room is full', () => {
       const room = roomService.resetGame('room1');
 
       expect(room.gameState.board.every((cell) => cell === null)).toBe(true);
-      expect(room.gameState.status).toBe('waiting');
-      expect(room.status).toBe('waiting');
+      // Game auto-starts since room still has 2 players
+      expect(room.gameState.status).toBe('playing');
+      expect(room.status).toBe('playing');
     });
 
     it('should reset all players ready status', () => {
       const room = roomService.resetGame('room1');
 
       expect(room.players.every((p) => !p.isReady)).toBe(true);
+    });
+
+    it('should alternate starting player across multiple resets', () => {
+      // First game starts with X (player1), after one move it's O's turn
+      const room1 = roomService.getRoom('room1');
+      expect(room1?.gameState.currentTurn).toBe('O'); // After X's move, it's O's turn
+      expect(room1?.gameState.lastStartingPlayer).toBe('X'); // X started this game
+
+      // Reset - second game should start with O (player2)
+      const room2 = roomService.resetGame('room1');
+      expect(room2.gameState.currentTurn).toBe('O');
+      expect(room2.gameState.lastStartingPlayer).toBe('O');
+
+      // Reset again - third game should start with X (player1)
+      const room3 = roomService.resetGame('room1');
+      expect(room3.gameState.currentTurn).toBe('X');
+      expect(room3.gameState.lastStartingPlayer).toBe('X');
+
+      // Reset again - fourth game should start with O (player2)
+      const room4 = roomService.resetGame('room1');
+      expect(room4.gameState.currentTurn).toBe('O');
+      expect(room4.gameState.lastStartingPlayer).toBe('O');
     });
   });
 });

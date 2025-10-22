@@ -159,7 +159,7 @@ pm2 restart tictactoe-api
 sudo systemctl restart nginx
 
 # Health check
-curl http://localhost:3000/health
+curl http://localhost:3021/health
 bash deployment/health-check.sh
 ```
 

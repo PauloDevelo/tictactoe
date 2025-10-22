@@ -255,15 +255,7 @@ export class OnlineGameService {
     const gameState = this.convertBackendToFrontendState(backendState);
     this.gameState$.next(gameState);
 
-    let opponent = currentInfo.opponent;
-    if (players && players.length > 0) {
-      const opponentPlayer = players.find(p => p.id !== currentInfo.currentPlayer.id);
-      if (opponentPlayer) {
-        console.log('Updated opponent from game update:', opponentPlayer);
-        opponent = opponentPlayer;
-      }
-    }
-
+    // Players keep their symbols - only the turn changes
     const isMyTurn = this.calculateIsMyTurn(currentInfo.currentPlayer.symbol, backendState.currentTurn);
     console.log('Is my turn calculation in update:', { 
       mySymbol: currentInfo.currentPlayer.symbol, 
@@ -273,7 +265,6 @@ export class OnlineGameService {
 
     const updatedInfo: OnlineGameInfo = {
       ...currentInfo,
-      opponent,
       isMyTurn
     };
 

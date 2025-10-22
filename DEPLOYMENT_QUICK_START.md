@@ -118,7 +118,7 @@ pm2 logs tictactoe-api --lines 20
 Edit `/var/www/tictactoe/backend/.env`:
 
 ```env
-PORT=3000
+PORT=3021
 NODE_ENV=production
 CORS_ORIGIN=https://your-domain.com
 RATE_LIMIT_WINDOW_MS=900000

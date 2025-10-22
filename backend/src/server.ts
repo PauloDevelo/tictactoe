@@ -245,7 +245,7 @@ const generateRoomId = (): string => {
   return Math.random().toString(36).substring(2, 8).toUpperCase();
 };
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3021;
 
 httpServer.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);

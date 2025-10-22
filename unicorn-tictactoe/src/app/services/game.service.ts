@@ -10,6 +10,8 @@ import { WINNING_COMBINATIONS } from '../models/winning-line.model';
   providedIn: 'root'
 })
 export class GameService {
+  private lastStartingPlayer: Player = Player.CAT; // Track last starting player (starts as CAT so first game starts with UNICORN)
+  
   private initialState: GameState = {
     board: Array(9).fill(null) as Cell[],
     currentPlayer: Player.UNICORN,
@@ -33,9 +35,12 @@ export class GameService {
    * Initialize a completely new game (resets scores)
    */
   initializeGame(): void {
+    // Alternate the starting player
+    this.lastStartingPlayer = this.getNextPlayer(this.lastStartingPlayer);
+    
     this.initialState = {
       board: Array(9).fill(null) as Cell[],
-      currentPlayer: Player.UNICORN,
+      currentPlayer: this.lastStartingPlayer,
       status: GameStatus.IN_PROGRESS,
       scores: {
         unicorn: 0,
@@ -51,9 +56,13 @@ export class GameService {
    */
   resetGame(): void {
     const currentState = this.gameStateSubject.value;
+    
+    // Alternate the starting player
+    this.lastStartingPlayer = this.getNextPlayer(this.lastStartingPlayer);
+    
     const newState: GameState = {
       board: Array(9).fill(null) as Cell[],
-      currentPlayer: Player.UNICORN,
+      currentPlayer: this.lastStartingPlayer,
       status: GameStatus.IN_PROGRESS,
       scores: {
         unicorn: currentState.scores.unicorn,

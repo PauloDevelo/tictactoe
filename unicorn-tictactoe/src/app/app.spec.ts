@@ -22,7 +22,12 @@ describe('App', () => {
     });
     
     mockTranslationService.getCurrentLanguage.and.returnValue('en');
-    mockTranslationService.translate.and.returnValue('Translated Text');
+    mockTranslationService.translate.and.callFake((key: string) => {
+      if (key === 'app.title') {
+        return 'Unicorn Tic-Tac-Toe';
+      }
+      return 'Translated Text';
+    });
     mockTranslationService.detectBrowserLanguage.and.returnValue({
       detected: 'en-US',
       normalized: 'en',

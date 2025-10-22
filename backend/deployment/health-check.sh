@@ -3,7 +3,7 @@
 set -e
 
 # Configuration
-API_URL="${API_URL:-http://localhost:3000}"
+API_URL="${API_URL:-http://localhost:3021}"
 HEALTH_ENDPOINT="${HEALTH_ENDPOINT:-/health}"
 MAX_RETRIES="${MAX_RETRIES:-3}"
 RETRY_DELAY="${RETRY_DELAY:-5}"

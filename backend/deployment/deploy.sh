@@ -141,7 +141,7 @@ sleep 5
 
 if pm2 list | grep -q "${APP_NAME}.*online"; then
     log_info "✅ Deployment successful!"
-    log_info "Application is running on port 3000"
+    log_info "Application is running on port 3021"
     log_info "PM2 status:"
     pm2 list
     log_info ""

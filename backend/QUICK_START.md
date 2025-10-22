@@ -12,7 +12,7 @@ npm install
 npm run dev
 ```
 
-Server will start on `http://localhost:3000` with both REST API and WebSocket support.
+Server will start on `http://localhost:3021` with both REST API and WebSocket support.
 
 ## Testing
 
@@ -42,7 +42,7 @@ Output will be in the `dist/` directory.
 Create a `.env` file based on `.env.example`:
 
 ```env
-PORT=3000
+PORT=3021
 CORS_ORIGIN=http://localhost:4200
 ```
 
@@ -98,7 +98,7 @@ See [REST API Documentation](./REST_API.md) for detailed information.
 ```typescript
 import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:3000');
+const socket = io('http://localhost:3021');
 
 // Create a room
 socket.emit('room:create', { roomName: 'My Game' });

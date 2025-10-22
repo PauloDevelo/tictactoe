@@ -5,7 +5,7 @@ This document describes the REST API endpoints available in the Tic-Tac-Toe back
 ## Base URL
 
 ```
-http://localhost:3000/api
+http://localhost:3021/api
 ```
 
 ## Endpoints
@@ -225,7 +225,7 @@ The API supports CORS and is configured to accept requests from:
 ### Create a Room
 
 ```bash
-curl -X POST http://localhost:3000/api/rooms \
+curl -X POST http://localhost:3021/api/rooms \
   -H "Content-Type: application/json" \
   -d '{"roomName": "My Game Room"}'
 ```
@@ -233,19 +233,19 @@ curl -X POST http://localhost:3000/api/rooms \
 ### Get All Rooms
 
 ```bash
-curl http://localhost:3000/api/rooms
+curl http://localhost:3021/api/rooms
 ```
 
 ### Get Room Details
 
 ```bash
-curl http://localhost:3000/api/rooms/ABC123
+curl http://localhost:3021/api/rooms/ABC123
 ```
 
 ### Delete a Room
 
 ```bash
-curl -X DELETE http://localhost:3000/api/rooms/ABC123
+curl -X DELETE http://localhost:3021/api/rooms/ABC123
 ```
 
 ## Notes
