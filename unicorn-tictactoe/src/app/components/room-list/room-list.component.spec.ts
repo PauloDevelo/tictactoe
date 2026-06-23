@@ -26,7 +26,8 @@ describe('RoomListComponent', () => {
         winner: null,
         winningLine: null
       },
-      createdAt: '2024-01-15T10:30:00.000Z'
+      createdAt: '2024-01-15T10:30:00.000Z',
+      gameType: 'tictactoe'
     },
     {
       id: 'ROOM2',
@@ -44,7 +45,8 @@ describe('RoomListComponent', () => {
         winner: null,
         winningLine: null
       },
-      createdAt: '2024-01-15T10:30:00.000Z'
+      createdAt: '2024-01-15T10:30:00.000Z',
+      gameType: 'tictactoe'
     },
     {
       id: 'ROOM3',
@@ -62,7 +64,8 @@ describe('RoomListComponent', () => {
         winner: 'X',
         winningLine: [0, 1, 2]
       },
-      createdAt: '2024-01-15T10:30:00.000Z'
+      createdAt: '2024-01-15T10:30:00.000Z',
+      gameType: 'tictactoe'
     }
   ];
 

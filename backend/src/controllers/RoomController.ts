@@ -50,7 +50,7 @@ export class RoomController {
   // POST /api/rooms - Create a new room
   createRoom(req: Request, res: Response): void {
     try {
-      const { roomName } = req.body;
+      const { roomName, gameType } = req.body;
 
       if (!roomName || typeof roomName !== 'string' || roomName.trim() === '') {
         res.status(400).json({
@@ -61,7 +61,7 @@ export class RoomController {
       }
 
       const roomId = generateRoomId();
-      const room = roomService.createRoom(roomId, roomName.trim());
+      const room = roomService.createRoom(roomId, roomName.trim(), gameType);
 
       res.status(201).json({
         success: true,

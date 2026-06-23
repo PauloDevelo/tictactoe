@@ -60,6 +60,24 @@
     "yes": "Yes",
     "no": "No"
   },
+  "gameType": {
+    "tictactoe": "Tic-Tac-Toe",
+    "connect4": "Connect 4"
+  },
+  "gameTypeSelector": {
+    "title": "Choose your game"
+  },
+  "connect4": {
+    "board": {
+      "ariaLabel": {
+        "gameOver": "Connect 4 game board - game over",
+        "inProgress": "Connect 4 game board - {{player}}'s turn"
+      }
+    },
+    "column": {
+      "label": "Column"
+    }
+  },
   "gameMode": {
     "title": "Choose Game Mode",
     "local": {
@@ -267,6 +285,9 @@
       "joinRoomFailed": "Failed to join room: {{message}}",
       "moveFailed": "Failed to make move: {{message}}",
       "resetFailed": "Failed to reset game: {{message}}"
+    },
+    "connect4": {
+      "columnFull": "Column is full"
     }
   }
 }

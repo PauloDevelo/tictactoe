@@ -1,0 +1,32 @@
+<div
+  class="connect4-board"
+  role="grid"
+  [attr.aria-label]="ariaLabel"
+>
+  <div
+    *ngFor="let col of columns; let ci = index"
+    class="connect4-column"
+    [attr.data-column]="col"
+    [attr.aria-label]="translationService.translate('connect4.column.label') + ' ' + (col + 1)"
+    [attr.aria-disabled]="!isColumnClickable(col)"
+    [attr.tabindex]="isColumnClickable(col) ? 0 : -1"
+    [class.disabled]="!isColumnClickable(col)"
+    (click)="onColumnClick(col)"
+    (keydown.enter)="onColumnClick(col, $event)"
+    (keydown.space)="onColumnClick(col, $event)"
+  >
+    <div
+      *ngFor="let row of rows"
+      class="connect4-cell-wrapper"
+    >
+      <app-game-cell
+        [player]="board[row * 7 + col]"
+        [currentPlayer]="currentPlayer"
+        [isGameOver]="isGameOver"
+        [isWinningCell]="isWinningCell(row * 7 + col)"
+        [cellIndex]="row * 7 + col"
+        [clickable]="false"
+      ></app-game-cell>
+    </div>
+  </div>
+</div>

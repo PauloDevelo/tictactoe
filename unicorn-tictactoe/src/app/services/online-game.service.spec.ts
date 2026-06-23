@@ -2,7 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { OnlineGameService, OnlineGameInfo } from './online-game.service';
 import { WebSocketService, BackendGameState, BackendPlayer, RoomJoinedEvent, PlayerJoinedEvent, GameUpdateEvent, GameOverEvent, ErrorEvent } from './websocket.service';
 import { TranslationService } from './translation.service';
-import { Subject, BehaviorSubject } from 'rxjs';
+import { RoomService, Room } from './room.service';
+import { Subject, BehaviorSubject, of } from 'rxjs';
 import { GameState } from '../models/game-state.model';
 import { Player } from '../models/player.model';
 import { GameStatus } from '../models/game-status.enum';
@@ -11,6 +12,7 @@ describe('OnlineGameService', () => {
   let service: OnlineGameService;
   let mockWebSocketService: jasmine.SpyObj<WebSocketService>;
   let mockTranslationService: jasmine.SpyObj<TranslationService>;
+  let mockRoomService: jasmine.SpyObj<RoomService>;
   
   // Mock subjects for WebSocket events
   let connectionStatusSubject: BehaviorSubject<boolean>;
@@ -53,6 +55,9 @@ describe('OnlineGameService', () => {
     mockWebSocketService.onError = jasmine.createSpy('onError')
       .and.returnValue(errorSubject.asObservable());
 
+    // Create mock RoomService
+    mockRoomService = jasmine.createSpyObj('RoomService', ['createRoom', 'getRooms', 'getRoom', 'deleteRoom']);
+
     // Create mock TranslationService
     mockTranslationService = jasmine.createSpyObj('TranslationService', ['translate']);
     mockTranslationService.translate.and.callFake((key: string, params?: any) => {
@@ -67,7 +72,8 @@ describe('OnlineGameService', () => {
       providers: [
         OnlineGameService,
         { provide: WebSocketService, useValue: mockWebSocketService },
-        { provide: TranslationService, useValue: mockTranslationService }
+        { provide: TranslationService, useValue: mockTranslationService },
+        { provide: RoomService, useValue: mockRoomService }
       ]
     });
 

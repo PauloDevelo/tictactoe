@@ -35,6 +35,12 @@
       (modeSelected)="onModeSelected($event)"
     ></app-game-mode-selector>
 
+    <!-- Game Type Selector -->
+    <app-game-type-selector
+      *ngIf="showModeSelector"
+      (gameTypeSelected)="onGameTypeSelected($event)"
+    ></app-game-type-selector>
+
     <!-- Online Mode: Room Selection -->
     <div *ngIf="isOnlineMode && !currentRoomId && !showModeSelector" class="online-lobby">
       <h2 class="lobby-title">{{ translationService.translate('app.lobby.title') }}</h2>
@@ -73,7 +79,7 @@
 
       <!-- Game components -->
       <app-score-board></app-score-board>
-      <app-game-board></app-game-board>
+      <app-game-board [currentMode]="currentMode"></app-game-board>
       <app-game-controls></app-game-controls>
     </div>
   </main>

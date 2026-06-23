@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { GameType } from '../models/game-type.model';
 
 export interface RoomPlayer {
   id: string;
@@ -27,6 +28,7 @@ export interface Room {
   maxPlayers: number;
   gameState: RoomGameState;
   createdAt: string;
+  gameType: GameType;
 }
 
 export interface RoomListResponse {
@@ -42,6 +44,7 @@ export interface RoomResponse {
 
 export interface CreateRoomRequest {
   roomName: string;
+  gameType?: GameType;
 }
 
 export interface DeleteRoomResponse {
@@ -80,8 +83,8 @@ export class RoomService {
   /**
    * Create a new room
    */
-  createRoom(roomName: string): Observable<Room> {
-    const request: CreateRoomRequest = { roomName };
+  createRoom(roomName: string, gameType: GameType = 'tictactoe'): Observable<Room> {
+    const request: CreateRoomRequest = { roomName, gameType };
     return this.http.post<RoomResponse>(`${this.apiUrl}/rooms`, request)
       .pipe(
         map(response => response.data)

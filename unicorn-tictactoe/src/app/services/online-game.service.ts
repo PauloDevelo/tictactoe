@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
+import { filter, map, takeUntil } from 'rxjs/operators';
 import { WebSocketService, BackendGameState, BackendPlayer } from './websocket.service';
 import { TranslationService } from './translation.service';
+import { RoomService } from './room.service';
 import { GameState } from '../models/game-state.model';
 import { Player } from '../models/player.model';
 import { GameStatus } from '../models/game-status.enum';
 import { Cell } from '../models/cell.model';
+import { GameType } from '../models/game-type.model';
 
 export interface OnlineGameInfo {
   roomId: string;
@@ -30,7 +32,8 @@ export class OnlineGameService {
 
   constructor(
     private wsService: WebSocketService,
-    private translationService: TranslationService
+    private translationService: TranslationService,
+    private roomService: RoomService
   ) {
     this.initializeWebSocketListeners();
   }
@@ -98,6 +101,22 @@ export class OnlineGameService {
   }
 
   /**
+   * Create a new room with the specified game type and join it.
+   * @param roomName - The name of the room to create
+   * @param playerName - The player's display name
+   * @param gameType - The type of game (default: 'tictactoe')
+   */
+  createRoom(roomName: string, playerName: string, gameType: GameType = 'tictactoe'): Observable<{ roomId: string; room: any }> {
+    return this.roomService.createRoom(roomName, gameType).pipe(
+      map(room => {
+        // Auto-join the newly created room via WebSocket
+        this.wsService.joinRoom(room.id, playerName);
+        return { roomId: room.id, room };
+      })
+    );
+  }
+
+  /**
    * Join a game room
    */
   joinRoom(roomId: string, playerName: string): void {
@@ -111,10 +130,12 @@ export class OnlineGameService {
 
   /**
    * Make a move in the current game
+   * For Tic-Tac-Toe: position is a cell index (0-8)
+   * For Connect 4: position is a column index (0-6), piece drops by gravity
    */
   makeMove(position: number): void {
     const gameInfo = this.onlineGameInfo$.value;
-    
+
     if (!gameInfo) {
       this.errorMessage$.next(this.translationService.translate('errors.game.noActiveGame'));
       return;
@@ -131,6 +152,8 @@ export class OnlineGameService {
       return;
     }
 
+    // For Connect 4, check if column is full (top cell is occupied)
+    // For Tic-Tac-Toe, check if cell is occupied
     if (currentState.board[position] !== null) {
       this.errorMessage$.next(this.translationService.translate('errors.game.cellOccupied'));
       return;

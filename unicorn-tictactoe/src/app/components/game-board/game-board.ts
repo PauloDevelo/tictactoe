@@ -1,25 +1,33 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subject, merge } from 'rxjs';
 import { takeUntil, filter } from 'rxjs/operators';
 import { GameCell } from '../game-cell/game-cell';
+import { Connect4Board } from '../connect4-board/connect4-board';
 import { Player } from '../../models/player.model';
 import { Cell } from '../../models/cell.model';
 import { GameStatus } from '../../models/game-status.enum';
+import { GameType } from '../../models/game-type.model';
+import { GameMode } from '../../models/game-mode.model';
 import { GameService } from '../../services/game.service';
 import { OnlineGameService } from '../../services/online-game.service';
 import { TranslationService } from '../../services/translation.service';
 
 @Component({
   selector: 'app-game-board',
-  imports: [CommonModule, GameCell],
+  imports: [CommonModule, GameCell, Connect4Board],
   templateUrl: './game-board.html',
   styleUrl: './game-board.css'
 })
 export class GameBoard implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
-  
-  cells: number[] = Array(9).fill(0).map((_, i) => i);
+
+  @Input() gameType: GameType = 'tictactoe';
+  @Input() currentMode: GameMode | null = null;
+
+  tttCells: number[] = Array(9).fill(0).map((_, i) => i);
+  c4Rows: number[] = Array(6).fill(0).map((_, i) => i);
+  c4Columns: number[] = Array(7).fill(0).map((_, i) => i);
   board: Cell[] = [];
   currentPlayer: Player = Player.UNICORN;
   isGameOver: boolean = false;
@@ -42,6 +50,13 @@ export class GameBoard implements OnInit, OnDestroy {
       .subscribe(info => {
         this.isOnlineMode = info !== null;
         this.isMyTurn = info?.isMyTurn ?? false;
+      });
+
+    // Subscribe to game type changes from GameService
+    this.gameService.gameType$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(type => {
+        this.gameType = type;
       });
 
     // Subscribe to local game state
@@ -104,6 +119,11 @@ export class GameBoard implements OnInit, OnDestroy {
       return false;
     }
 
+    // In AI mode, the human plays UNICORN and the AI plays CAT
+    if (this.currentMode === 'ai' && this.currentPlayer === Player.CAT) {
+      return false;
+    }
+
     return true;
   }
 
@@ -116,6 +136,21 @@ export class GameBoard implements OnInit, OnDestroy {
       this.onlineGameService.makeMove(index);
     } else {
       this.gameService.makeMove(index);
+    }
+  }
+
+  /**
+   * Handle Connect 4 column click
+   */
+  onColumnClick(col: number): void {
+    if (!this.isCellClickable(col)) {
+      return;
+    }
+
+    if (this.isOnlineMode) {
+      this.onlineGameService.makeMove(col);
+    } else {
+      this.gameService.makeMove(col);
     }
   }
 

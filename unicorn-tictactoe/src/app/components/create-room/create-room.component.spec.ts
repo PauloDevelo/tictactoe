@@ -3,12 +3,14 @@ import { FormsModule } from '@angular/forms';
 import { of, throwError, Subject } from 'rxjs';
 import { CreateRoomComponent } from './create-room.component';
 import { RoomService, Room } from '../../services/room.service';
+import { GameService } from '../../services/game.service';
 import { TranslationService } from '../../services/translation.service';
 
 describe('CreateRoomComponent', () => {
   let component: CreateRoomComponent;
   let fixture: ComponentFixture<CreateRoomComponent>;
   let mockRoomService: jasmine.SpyObj<RoomService>;
+  let mockGameService: jasmine.SpyObj<GameService>;
   let mockTranslationService: jasmine.SpyObj<TranslationService>;
 
   const mockRoom: Room = {
@@ -24,11 +26,14 @@ describe('CreateRoomComponent', () => {
       winner: null,
       winningLine: null
     },
-    createdAt: '2024-01-15T10:30:00.000Z'
+    createdAt: '2024-01-15T10:30:00.000Z',
+    gameType: 'tictactoe'
   };
 
   beforeEach(async () => {
     mockRoomService = jasmine.createSpyObj('RoomService', ['createRoom']);
+    mockGameService = jasmine.createSpyObj('GameService', ['getGameType']);
+    mockGameService.getGameType.and.returnValue('tictactoe');
     mockTranslationService = jasmine.createSpyObj('TranslationService', ['translate']);
     mockTranslationService.translate.and.callFake((key: string) => key);
 
@@ -36,6 +41,7 @@ describe('CreateRoomComponent', () => {
       imports: [CreateRoomComponent, FormsModule],
       providers: [
         { provide: RoomService, useValue: mockRoomService },
+        { provide: GameService, useValue: mockGameService },
         { provide: TranslationService, useValue: mockTranslationService }
       ]
     }).compileComponents();
@@ -60,8 +66,8 @@ describe('CreateRoomComponent', () => {
       component.createRoom();
 
       setTimeout(() => {
-        expect(mockRoomService.createRoom).toHaveBeenCalledWith('Valid Room Name');
-        expect(component.roomCreated.emit).toHaveBeenCalledWith({ room: mockRoom, playerName: 'Alice' });
+        expect(mockRoomService.createRoom).toHaveBeenCalledWith('Valid Room Name', 'tictactoe');
+        expect(component.roomCreated.emit).toHaveBeenCalledWith({ room: mockRoom, playerName: 'Alice', gameType: 'tictactoe' });
         expect(component.roomName).toBe('');
         expect(component.playerName).toBe('');
         expect(component.creating).toBe(false);
@@ -80,8 +86,25 @@ describe('CreateRoomComponent', () => {
       component.createRoom();
 
       setTimeout(() => {
-        expect(mockRoomService.createRoom).toHaveBeenCalledWith('Valid Room Name');
-        expect(component.roomCreated.emit).toHaveBeenCalledWith({ room: mockRoom, playerName: 'Alice' });
+        expect(mockRoomService.createRoom).toHaveBeenCalledWith('Valid Room Name', 'tictactoe');
+        expect(component.roomCreated.emit).toHaveBeenCalledWith({ room: mockRoom, playerName: 'Alice', gameType: 'tictactoe' });
+        done();
+      }, 100);
+    });
+
+    it('should create room with connect4 game type when selected', (done) => {
+      mockGameService.getGameType.and.returnValue('connect4');
+      component.roomName = 'Connect4 Room';
+      component.playerName = 'Bob';
+      mockRoomService.createRoom.and.returnValue(of(mockRoom));
+
+      spyOn(component.roomCreated, 'emit');
+
+      component.createRoom();
+
+      setTimeout(() => {
+        expect(mockRoomService.createRoom).toHaveBeenCalledWith('Connect4 Room', 'connect4');
+        expect(component.roomCreated.emit).toHaveBeenCalledWith({ room: mockRoom, playerName: 'Bob', gameType: 'connect4' });
         done();
       }, 100);
     });

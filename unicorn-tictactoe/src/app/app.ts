@@ -6,13 +6,19 @@ import { GameBoard } from './components/game-board/game-board';
 import { ScoreBoard } from './components/score-board/score-board';
 import { GameControls } from './components/game-controls/game-controls';
 import { GameModeSelectorComponent } from './components/game-mode-selector/game-mode-selector.component';
+import { GameTypeSelectorComponent } from './components/game-type-selector/game-type-selector.component';
 import { RoomListComponent } from './components/room-list/room-list.component';
 import { CreateRoomComponent, CreateRoomData } from './components/create-room/create-room.component';
 import { GameMode } from './models/game-mode.model';
+import { GameType } from './models/game-type.model';
 import { OnlineGameService } from './services/online-game.service';
 import { GameService } from './services/game.service';
+import { AiService } from './services/ai.service';
 import { TranslationService } from './services/translation.service';
 import { Room } from './services/room.service';
+import { GameState } from './models/game-state.model';
+import { Player } from './models/player.model';
+import { GameStatus } from './models/game-status.enum';
 
 @Component({
   selector: 'app-root',
@@ -22,6 +28,7 @@ import { Room } from './services/room.service';
     ScoreBoard,
     GameControls,
     GameModeSelectorComponent,
+    GameTypeSelectorComponent,
     RoomListComponent,
     CreateRoomComponent
   ],
@@ -30,10 +37,14 @@ import { Room } from './services/room.service';
 })
 export class App implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
+  private aiMoveCancel: (() => void) | null = null;
 
   // Game mode state
   currentMode: GameMode | null = null;
   showModeSelector = true;
+
+  // Game type state
+  currentGameType: GameType = 'tictactoe';
 
   // Online game state
   isOnlineMode = false;
@@ -45,6 +56,7 @@ export class App implements OnInit, OnDestroy {
   constructor(
     private onlineGameService: OnlineGameService,
     private gameService: GameService,
+    private aiService: AiService,
     public readonly translationService: TranslationService
   ) {}
 
@@ -79,12 +91,40 @@ export class App implements OnInit, OnDestroy {
           this.connectionError = null;
         }, 5000);
       });
+
+    // Subscribe to local game state to trigger AI moves in "vs AI" mode
+    this.gameService.gameState$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(state => {
+        if (this.currentMode === 'ai' && this.isAiTurn(state)) {
+          this.cancelAiMove();
+          this.aiMoveCancel = this.aiService.scheduleMove();
+        }
+      });
+  }
+
+  /**
+   * Check if it is the AI's turn in the current game state.
+   */
+  private isAiTurn(state: GameState): boolean {
+    return state.status === GameStatus.IN_PROGRESS && state.currentPlayer === Player.CAT;
+  }
+
+  /**
+   * Cancel any pending AI move.
+   */
+  private cancelAiMove(): void {
+    if (this.aiMoveCancel) {
+      this.aiMoveCancel();
+      this.aiMoveCancel = null;
+    }
   }
 
   /**
    * Handle game mode selection
    */
   onModeSelected(mode: GameMode): void {
+    this.cancelAiMove();
     this.currentMode = mode;
     this.showModeSelector = false;
 
@@ -100,6 +140,14 @@ export class App implements OnInit, OnDestroy {
   }
 
   /**
+   * Handle game type selection
+   */
+  onGameTypeSelected(type: GameType): void {
+    this.currentGameType = type;
+    // GameService.setGameType is already called by the component
+  }
+
+  /**
    * Handle room created event
    */
   onRoomCreated(data: CreateRoomData): void {
@@ -112,6 +160,8 @@ export class App implements OnInit, OnDestroy {
    * Return to mode selector
    */
   returnToModeSelector(): void {
+    this.cancelAiMove();
+
     // Leave room if in online mode
     if (this.isOnlineMode && this.currentRoomId) {
       this.onlineGameService.leaveRoom();
@@ -146,6 +196,8 @@ export class App implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.cancelAiMove();
+
     // Cleanup
     if (this.isOnlineMode) {
       this.onlineGameService.disconnect();

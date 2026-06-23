@@ -3,6 +3,7 @@ export * from './cell.model';
 export * from './game-mode.model';
 export * from './game-state.model';
 export * from './game-status.enum';
+export * from './game-type.model';
 export * from './player.model';
 export * from './winning-line.model';
 
