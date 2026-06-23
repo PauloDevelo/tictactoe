@@ -2,11 +2,14 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RoomService, Room } from '../../services/room.service';
+import { GameService } from '../../services/game.service';
+import { GameType } from '../../models/game-type.model';
 import { TranslationService } from '../../services/translation.service';
 
 export interface CreateRoomData {
   room: Room;
   playerName: string;
+  gameType: GameType;
 }
 
 @Component({
@@ -26,6 +29,7 @@ export class CreateRoomComponent {
 
   constructor(
     private roomService: RoomService,
+    private gameService: GameService,
     public readonly translationService: TranslationService
   ) {}
 
@@ -69,9 +73,10 @@ export class CreateRoomComponent {
     this.creating = true;
     this.error = null;
 
-    this.roomService.createRoom(trimmedName).subscribe({
+    const gameType = this.gameService.getGameType();
+    this.roomService.createRoom(trimmedName, gameType).subscribe({
       next: (room) => {
-        this.roomCreated.emit({ room, playerName: trimmedPlayerName });
+        this.roomCreated.emit({ room, playerName: trimmedPlayerName, gameType });
         this.roomName = '';
         this.playerName = '';
         this.creating = false;

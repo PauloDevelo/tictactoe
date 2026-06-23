@@ -21,7 +21,8 @@ describe('RoomService', () => {
       winner: null,
       winningLine: null
     },
-    createdAt: '2024-01-15T10:30:00.000Z'
+    createdAt: '2024-01-15T10:30:00.000Z',
+    gameType: 'tictactoe'
   };
 
   beforeEach(() => {
@@ -98,7 +99,7 @@ describe('RoomService', () => {
   });
 
   describe('createRoom', () => {
-    it('should create a new room', (done) => {
+    it('should create a new room with default gameType', (done) => {
       const roomName = 'New Game Room';
       const mockResponse: RoomResponse = {
         success: true,
@@ -108,12 +109,32 @@ describe('RoomService', () => {
       service.createRoom(roomName).subscribe(room => {
         expect(room.name).toBe(roomName);
         expect(room.id).toBeTruthy();
+        expect(room.gameType).toBe('tictactoe');
         done();
       });
 
       const req = httpMock.expectOne(`${apiUrl}/rooms`);
       expect(req.request.method).toBe('POST');
-      expect(req.request.body).toEqual({ roomName });
+      expect(req.request.body).toEqual({ roomName, gameType: 'tictactoe' });
+      req.flush(mockResponse);
+    });
+
+    it('should create a new room with specified gameType', (done) => {
+      const roomName = 'Connect4 Room';
+      const mockResponse: RoomResponse = {
+        success: true,
+        data: { ...mockRoom, name: roomName, gameType: 'connect4' }
+      };
+
+      service.createRoom(roomName, 'connect4').subscribe(room => {
+        expect(room.name).toBe(roomName);
+        expect(room.gameType).toBe('connect4');
+        done();
+      });
+
+      const req = httpMock.expectOne(`${apiUrl}/rooms`);
+      expect(req.request.method).toBe('POST');
+      expect(req.request.body).toEqual({ roomName, gameType: 'connect4' });
       req.flush(mockResponse);
     });
   });

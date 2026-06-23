@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { GameService } from './game.service';
 import { Player } from '../models/player.model';
 import { GameStatus } from '../models/game-status.enum';
+import { GameType } from '../models/game-type.model';
 
 describe('GameService', () => {
   let service: GameService;
@@ -51,6 +52,71 @@ describe('GameService', () => {
         expect(state.winningLine).toBeNull();
         done();
       });
+    });
+  });
+
+  describe('Game Type', () => {
+    it('should default to tictactoe', () => {
+      expect(service.getGameType()).toBe('tictactoe');
+    });
+
+    it('should set game type to connect4', () => {
+      service.setGameType('connect4');
+      expect(service.getGameType()).toBe('connect4');
+    });
+
+    it('should set game type back to tictactoe', () => {
+      service.setGameType('connect4');
+      service.setGameType('tictactoe');
+      expect(service.getGameType()).toBe('tictactoe');
+    });
+
+    it('should allow rapid switching between game types', () => {
+      service.setGameType('connect4');
+      expect(service.getGameType()).toBe('connect4');
+      service.setGameType('tictactoe');
+      expect(service.getGameType()).toBe('tictactoe');
+      service.setGameType('connect4');
+      expect(service.getGameType()).toBe('connect4');
+    });
+
+    it('should emit changes reactively via gameType$', (done) => {
+      const emissions: GameType[] = [];
+      service.gameType$.subscribe(type => {
+        emissions.push(type);
+        if (emissions.length === 3) {
+          expect(emissions).toEqual(['tictactoe', 'connect4', 'tictactoe']);
+          done();
+        }
+      });
+      service.setGameType('connect4');
+      service.setGameType('tictactoe');
+    });
+
+    it('should reflect gameType$ value matches getGameType()', (done) => {
+      service.setGameType('connect4');
+      service.gameType$.subscribe(type => {
+        expect(type).toBe(service.getGameType());
+        expect(type).toBe('connect4');
+        done();
+      });
+    });
+
+    it('should emit connect4 via gameType$ when setGameType is called', (done) => {
+      service.setGameType('connect4');
+      service.gameType$.subscribe(type => {
+        expect(type).toBe('connect4');
+        done();
+      });
+    });
+
+    it('should not affect game state when game type changes', () => {
+      const initialState = service.getCurrentState();
+      service.setGameType('connect4');
+      const afterChange = service.getCurrentState();
+      expect(afterChange.board).toEqual(initialState.board);
+      expect(afterChange.currentPlayer).toBe(initialState.currentPlayer);
+      expect(afterChange.status).toBe(initialState.status);
     });
   });
 

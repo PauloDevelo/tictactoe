@@ -1,15 +1,27 @@
-<div 
-  class="game-board" 
-  role="grid" 
-  [attr.aria-label]="translationService.translate('game.board.aria.gameBoard')"
->
-  <app-game-cell
-    *ngFor="let cell of cells; let i = index"
-    [player]="getCellPlayer(i)"
+<ng-container *ngIf="gameType === 'tictactoe'; else connect4Template">
+  <div
+    class="game-board"
+    role="grid"
+    [attr.aria-label]="translationService.translate('game.board.aria.gameBoard')"
+  >
+    <app-game-cell
+      *ngFor="let cell of tttCells; let i = index"
+      [player]="getCellPlayer(i)"
+      [currentPlayer]="currentPlayer"
+      [isGameOver]="isGameOver"
+      [isWinningCell]="isWinningCell(i)"
+      [cellIndex]="i"
+      (cellClicked)="onCellClick(i)"
+    ></app-game-cell>
+  </div>
+</ng-container>
+
+<ng-template #connect4Template>
+  <app-connect4-board
+    [board]="board"
     [currentPlayer]="currentPlayer"
+    [winningLine]="winningLine"
     [isGameOver]="isGameOver"
-    [isWinningCell]="isWinningCell(i)"
-    [cellIndex]="i"
-    (cellClicked)="onCellClick(i)"
-  ></app-game-cell>
-</div>
+    (onCellClick)="onColumnClick($event)"
+  ></app-connect4-board>
+</ng-template>

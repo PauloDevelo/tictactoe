@@ -15,6 +15,7 @@ export class GameCell {
   @Input() isGameOver: boolean = false;
   @Input() isWinningCell: boolean = false;
   @Input() cellIndex: number = 0;
+  @Input() clickable: boolean = true;
 
   @Output() cellClicked = new EventEmitter<void>();
 

@@ -6,6 +6,7 @@ import {
   GameUpdateEvent, 
   GameOverEvent, 
   ErrorEvent,
+  RoomCreatedEvent,
   BackendPlayer,
   BackendGameState
 } from './websocket.service';
@@ -82,6 +83,24 @@ describe('WebSocketService', () => {
 
       // Trigger the observable by calling the private subject
       (service as any).roomJoined$.next(mockData);
+    });
+
+    it('should provide roomCreated observable', (done) => {
+      const mockData: RoomCreatedEvent = {
+        room: {
+          id: 'room456',
+          name: 'New Room',
+          gameType: 'connect4',
+        }
+      };
+
+      service.onRoomCreated().subscribe((data) => {
+        expect(data.room.id).toBe('room456');
+        expect(data.room.gameType).toBe('connect4');
+        done();
+      });
+
+      (service as any).roomCreated$.next(mockData);
     });
 
     it('should provide playerJoined observable', (done) => {
@@ -168,6 +187,12 @@ describe('WebSocketService', () => {
     it('should throw error when leaving room without connection', () => {
       expect(() => {
         service.leaveRoom('room123');
+      }).toThrowError('errors.websocket.notConnected');
+    });
+
+    it('should throw error when creating room without connection', () => {
+      expect(() => {
+        service.createRoom('New Room', 'Alice');
       }).toThrowError('errors.websocket.notConnected');
     });
   });

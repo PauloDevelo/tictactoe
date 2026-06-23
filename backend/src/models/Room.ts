@@ -1,5 +1,7 @@
 import { Player } from './Player';
 import { GameState, createInitialGameState } from './GameState';
+import { createInitialGameStateC4 } from './Connect4GameState';
+import { GameType } from './GameType';
 
 export type RoomStatus = 'waiting' | 'ready' | 'playing' | 'finished';
 
@@ -10,16 +12,18 @@ export interface Room {
   maxPlayers: number;
   gameState: GameState;
   status: RoomStatus;
+  gameType: GameType;
   createdAt: Date;
 }
 
-export const createRoom = (id: string, name: string): Room => ({
+export const createRoom = (id: string, name: string, gameType: GameType = 'tictactoe'): Room => ({
   id,
   name,
   players: [],
   maxPlayers: 2,
-  gameState: createInitialGameState(),
+  gameState: gameType === 'connect4' ? createInitialGameStateC4() : createInitialGameState(),
   status: 'waiting',
+  gameType,
   createdAt: new Date(),
 });
 

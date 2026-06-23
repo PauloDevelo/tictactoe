@@ -23,7 +23,8 @@ describe('RoomDetailsComponent', () => {
       winner: null,
       winningLine: null
     },
-    createdAt: '2024-01-15T10:30:00.000Z'
+    createdAt: '2024-01-15T10:30:00.000Z',
+    gameType: 'tictactoe'
   };
 
   beforeEach(async () => {

@@ -40,10 +40,10 @@ io.on('connection', (socket: Socket) => {
   console.log(`✅ Client connected: ${socket.id}`);
 
   // Event: Create Room
-  socket.on('room:create', ({ roomName }: { roomName: string }) => {
+  socket.on('room:create', ({ roomName, gameType }: { roomName: string; gameType?: string }) => {
     try {
       const roomId = generateRoomId();
-      const room = roomService.createRoom(roomId, roomName);
+      const room = roomService.createRoom(roomId, roomName, gameType as any);
       
       socket.emit('room:created', { room });
       console.log(`🏠 Room created: ${roomId} - ${roomName}`);

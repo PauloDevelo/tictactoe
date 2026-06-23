@@ -1,3 +1,6 @@
+/* ========================================
+   Tic-Tac-Toe Board (3x3)
+   ======================================== */
 .game-board {
   display: grid;
   grid-template-columns: repeat(3, 120px);

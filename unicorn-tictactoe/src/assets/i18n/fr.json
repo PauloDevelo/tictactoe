@@ -61,6 +61,24 @@
       "no": "Non"
     },
 
+  "gameType": {
+    "tictactoe": "Morpion",
+    "connect4": "Puissance 4"
+  },
+  "gameTypeSelector": {
+    "title": "Choisissez votre jeu"
+  },
+  "connect4": {
+    "board": {
+      "ariaLabel": {
+        "gameOver": "Plateau de jeu Puissance 4 - partie terminée",
+        "inProgress": "Plateau de jeu Puissance 4 - tour de {{player}}"
+      }
+    },
+    "column": {
+      "label": "Colonne"
+    }
+  },
   "gameMode": {
     "title": "Choisissez votre mode de jeu",
     "local": {
@@ -225,7 +243,7 @@
         "resetGame": "Réinitialiser la partie en cours"
       }
     },
-    "score": {
+   "score": {
       "labels": {
         "unicorn": "Licorne",
         "cat": "Chat",
@@ -268,6 +286,9 @@
       "joinRoomFailed": "Échec de la connexion à la salle : {{message}}",
       "moveFailed": "Échec du coup : {{message}}",
       "resetFailed": "Échec de la réinitialisation : {{message}}"
+    },
+    "connect4": {
+      "columnFull": "La colonne est pleine"
     }
   }
 }

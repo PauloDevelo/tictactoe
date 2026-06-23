@@ -1,0 +1,24 @@
+<div class="game-type-selector">
+  <h3 class="selector-label">🎮 {{ selectorTitle }}</h3>
+
+  <div class="type-options">
+    <label
+      *ngFor="let gt of gameTypes"
+      class="type-option"
+      [class.selected]="selectedType === gt.type"
+    >
+      <input
+        type="radio"
+        name="gameType"
+        [value]="gt.type"
+        [checked]="selectedType === gt.type"
+        (change)="selectGameType(gt.type)"
+        class="type-radio"
+      />
+      <div class="type-content">
+        <span class="type-icon">{{ gt.icon }}</span>
+        <span class="type-label">{{ getGameTypeLabel(gt.type) }}</span>
+      </div>
+    </label>
+  </div>
+</div>

@@ -3,6 +3,7 @@ import { io, Socket } from 'socket.io-client';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { TranslationService } from './translation.service';
+import { GameType } from '../models/game-type.model';
 
 // Backend data types (matching server models)
 export type CellValue = 'X' | 'O' | null;
@@ -50,6 +51,15 @@ export interface ErrorEvent {
   message: string;
 }
 
+export interface RoomCreatedEvent {
+  room: {
+    id: string;
+    name: string;
+    gameType: GameType;
+    [key: string]: any;
+  };
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -58,6 +68,7 @@ export class WebSocketService {
   private connectionStatus$ = new BehaviorSubject<boolean>(false);
 
   // Event subjects
+  private roomCreated$ = new Subject<RoomCreatedEvent>();
   private roomJoined$ = new Subject<RoomJoinedEvent>();
   private playerJoined$ = new Subject<PlayerJoinedEvent>();
   private gameUpdate$ = new Subject<GameUpdateEvent>();
@@ -119,6 +130,13 @@ export class WebSocketService {
     });
 
     // Game events - matching backend event names with colons
+    this.socket.on('room:created', (data: any) => {
+      console.log('room:created event received:', data);
+      if (data.room) {
+        this.roomCreated$.next({ room: data.room });
+      }
+    });
+
     this.socket.on('room:joined', (data: any) => {
       console.log('room:joined event received:', data);
       if (data.room) {
@@ -199,6 +217,17 @@ export class WebSocketService {
   }
 
   /**
+   * Create a new room via WebSocket
+   */
+  createRoom(roomName: string, playerName: string, gameType: GameType = 'tictactoe'): void {
+    if (!this.socket?.connected) {
+      throw new Error(this.translationService.translate('errors.websocket.notConnected'));
+    }
+    console.log('Emitting room:create with:', { roomName, playerName, gameType });
+    this.socket.emit('room:create', { roomName, playerName, gameType });
+  }
+
+  /**
    * Make a move in the game
    */
   makeMove(roomId: string, position: number): void {
@@ -236,6 +265,13 @@ export class WebSocketService {
    */
   getConnectionStatus(): Observable<boolean> {
     return this.connectionStatus$.asObservable();
+  }
+
+  /**
+   * Observable for room created events
+   */
+  onRoomCreated(): Observable<RoomCreatedEvent> {
+    return this.roomCreated$.asObservable();
   }
 
   /**

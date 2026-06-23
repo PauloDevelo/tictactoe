@@ -12,21 +12,33 @@ import {
 import { Player, createPlayer, setPlayerReady } from '../models/Player';
 import {
   GameState,
+  CellValue,
   createInitialGameState,
   makeMove,
   startGame,
   resetGame,
 } from '../models/GameState';
+import { GameType } from '../models/GameType';
+import {
+  COLUMNS,
+  createInitialGameStateC4,
+  makeMoveC4,
+  getDropPosition,
+  checkWinnerC4,
+  getWinningLineC4,
+  isBoardFullC4,
+  resetGameC4,
+} from '../models/Connect4GameState';
 
 export class RoomService {
   private rooms: Map<string, Room> = new Map();
 
-  createRoom(roomId: string, roomName: string): Room {
+  createRoom(roomId: string, roomName: string, gameType: GameType = 'tictactoe'): Room {
     if (this.rooms.has(roomId)) {
       throw new Error(`Room with ID ${roomId} already exists`);
     }
 
-    const room = createRoom(roomId, roomName);
+    const room = createRoom(roomId, roomName, gameType);
     this.rooms.set(roomId, room);
     return room;
   }
@@ -100,10 +112,14 @@ export class RoomService {
     const remainingPlayer = updatedRoom.players[0];
     console.log(`👤 Remaining player: ${remainingPlayer.id}, symbol: ${remainingPlayer.symbol}`);
 
+    const resetGameState = updatedRoom.gameType === 'connect4'
+      ? createInitialGameStateC4()
+      : createInitialGameState();
+
     const resetRoom = {
       ...updatedRoom,
       status: 'waiting' as const,
-      gameState: createInitialGameState(),
+      gameState: resetGameState,
     };
 
     console.log(`🔄 Room reset. Game state currentTurn: ${resetRoom.gameState.currentTurn}`);
@@ -156,6 +172,25 @@ export class RoomService {
     return updatedRoom;
   }
 
+  private makeConnect4Move(state: GameState, column: number, symbol: 'X' | 'O'): GameState {
+    const newBoard = [...state.board];
+    const dropPos = getDropPosition(newBoard, column);
+    if (dropPos === -1 || state.status !== 'playing') {
+      return state;
+    }
+    newBoard[dropPos] = symbol;
+    const winResult = checkWinnerC4(newBoard);
+    const isBoardFull = isBoardFullC4(newBoard);
+    return {
+      ...state,
+      board: newBoard,
+      currentTurn: symbol === 'X' ? 'O' : 'X',
+      status: winResult || isBoardFull ? 'finished' : 'playing',
+      winner: winResult || (isBoardFull ? 'draw' : null),
+      winningLine: winResult ? getWinningLineC4(newBoard) : null,
+    };
+  }
+
   makeMove(
     roomId: string,
     playerId: string,
@@ -166,7 +201,7 @@ export class RoomService {
       throw new Error(`Room ${roomId} not found`);
     }
 
-    console.log(`🎯 Move attempt in room ${roomId}: room.status=${room.status}, game.status=${room.gameState.status}`);
+    console.log(`🎯 Move attempt in room ${roomId}: room.status=${room.status}, game.status=${room.gameState.status}, gameType=${room.gameType}`);
     
     if (room.status !== 'playing') {
       throw new Error('Game is not in progress');
@@ -181,11 +216,17 @@ export class RoomService {
       throw new Error('Not your turn');
     }
 
-    const updatedGameState = makeMove(
-      room.gameState,
-      position,
-      player.symbol
-    );
+    let updatedGameState: GameState;
+
+    if (room.gameType === 'connect4') {
+      updatedGameState = this.makeConnect4Move(room.gameState, position, player.symbol);
+    } else {
+      updatedGameState = makeMove(
+        room.gameState,
+        position,
+        player.symbol
+      );
+    }
 
     let updatedRoom = updateGameState(room, updatedGameState);
 
@@ -203,7 +244,13 @@ export class RoomService {
       throw new Error(`Room ${roomId} not found`);
     }
 
-    const updatedGameState = resetGame(room.gameState); // Pass previous state to alternate starting player
+    let updatedGameState: GameState;
+    if (room.gameType === 'connect4') {
+      updatedGameState = resetGameC4(room.gameState); // Pass previous state to alternate starting player
+    } else {
+      updatedGameState = resetGame(room.gameState); // Pass previous state to alternate starting player
+    }
+
     let updatedRoom = updateGameState(room, updatedGameState);
 
     // Players keep their symbols - only the starting turn alternates
@@ -227,5 +274,6 @@ export class RoomService {
     return updatedRoom;
   }
 }
+
 
 export const roomService = new RoomService();
