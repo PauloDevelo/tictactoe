@@ -245,9 +245,10 @@ const generateRoomId = (): string => {
   return Math.random().toString(36).substring(2, 8).toUpperCase();
 };
 
-const PORT = process.env.PORT || 3021;
+const PORT = Number(process.env.PORT) || 3021;
+const HOST = process.env.HOST || '127.0.0.1';
 
-httpServer.listen(PORT, () => {
+httpServer.listen(PORT, HOST, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📡 Socket.IO ready for connections`);
   console.log(`🌐 CORS enabled for: ${process.env.CORS_ORIGIN || 'http://localhost:4200'}`);
